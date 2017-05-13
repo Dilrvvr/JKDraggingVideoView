@@ -10,7 +10,6 @@
 		5022ECD61E7E639900F91AA3 /* JKDraggingVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022ECD51E7E639900F91AA3 /* JKDraggingVideoView.m */; };
 		5022ECD91E7E63BA00F91AA3 /* JKDraggingVideoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022ECD81E7E63BA00F91AA3 /* JKDraggingVideoItem.m */; };
 		5022ECDC1E7E6FEE00F91AA3 /* JKVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022ECDB1E7E6FEE00F91AA3 /* JKVideoView.m */; };
-		5022ECDE1E7E9ED500F91AA3 /* resource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5022ECDD1E7E9ED500F91AA3 /* resource.bundle */; };
 		5070BE2E1E7D1EC600739AAE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070BE2D1E7D1EC600739AAE /* main.m */; };
 		5070BE311E7D1EC600739AAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070BE301E7D1EC600739AAE /* AppDelegate.m */; };
 		5070BE371E7D1EC600739AAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5070BE351E7D1EC600739AAE /* Main.storyboard */; };
@@ -27,6 +26,7 @@
 		509EA7C21E7FAE2F008A17F6 /* NSTimer+JKExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 509EA7C11E7FAE2F008A17F6 /* NSTimer+JKExtension.m */; };
 		509EA7C51E7FBD96008A17F6 /* JKLandscapeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 509EA7C41E7FBD96008A17F6 /* JKLandscapeViewController.m */; };
 		509EA7C81E7FDF2E008A17F6 /* ThirdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 509EA7C71E7FDF2E008A17F6 /* ThirdViewController.m */; };
+		50C6AD5B1EC75F6D002FF568 /* JKVideoViewResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 50C6AD5A1EC75F6D002FF568 /* JKVideoViewResource.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +53,6 @@
 		5022ECD81E7E63BA00F91AA3 /* JKDraggingVideoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKDraggingVideoItem.m; sourceTree = "<group>"; };
 		5022ECDA1E7E6FEE00F91AA3 /* JKVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKVideoView.h; sourceTree = "<group>"; };
 		5022ECDB1E7E6FEE00F91AA3 /* JKVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKVideoView.m; sourceTree = "<group>"; };
-		5022ECDD1E7E9ED500F91AA3 /* resource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = resource.bundle; sourceTree = "<group>"; };
 		5070BE291E7D1EC600739AAE /* JKDraggingView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JKDraggingView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5070BE2D1E7D1EC600739AAE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5070BE2F1E7D1EC600739AAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -86,6 +85,7 @@
 		509EA7C41E7FBD96008A17F6 /* JKLandscapeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKLandscapeViewController.m; sourceTree = "<group>"; };
 		509EA7C61E7FDF2E008A17F6 /* ThirdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThirdViewController.h; sourceTree = "<group>"; };
 		509EA7C71E7FDF2E008A17F6 /* ThirdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThirdViewController.m; sourceTree = "<group>"; };
+		50C6AD5A1EC75F6D002FF568 /* JKVideoViewResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = JKVideoViewResource.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,7 +201,7 @@
 				5022ECDB1E7E6FEE00F91AA3 /* JKVideoView.m */,
 				509EA7C31E7FBD96008A17F6 /* JKLandscapeViewController.h */,
 				509EA7C41E7FBD96008A17F6 /* JKLandscapeViewController.m */,
-				5022ECDD1E7E9ED500F91AA3 /* resource.bundle */,
+				50C6AD5A1EC75F6D002FF568 /* JKVideoViewResource.bundle */,
 			);
 			path = JKDraggingView;
 			sourceTree = "<group>";
@@ -316,9 +316,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5070BE3C1E7D1EC600739AAE /* LaunchScreen.storyboard in Resources */,
+				50C6AD5B1EC75F6D002FF568 /* JKVideoViewResource.bundle in Resources */,
 				5070BE391E7D1EC600739AAE /* Assets.xcassets in Resources */,
 				5070BE371E7D1EC600739AAE /* Main.storyboard in Resources */,
-				5022ECDE1E7E9ED500F91AA3 /* resource.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

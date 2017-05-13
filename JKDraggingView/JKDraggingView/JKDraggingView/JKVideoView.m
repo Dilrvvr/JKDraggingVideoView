@@ -222,7 +222,7 @@
         NSLog(@"下载进度：%.2f", timeInterval / totalDuration);
         self.cacheProgressView.progress = timeInterval / totalDuration;
         if (self.cacheProgressView.progress >= 1.0) {
-            [self.progressSlider setMaximumTrackImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_slider_MaximumTrackImage@2x.png"]] forState:UIControlStateNormal];
+            [self.progressSlider setMaximumTrackImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_slider_MaximumTrackImage@2x.png"]] forState:UIControlStateNormal];
             self.cacheProgressView.hidden = YES;
         }
         
@@ -357,8 +357,8 @@
     self.videoTimeLabel.text = [self timeString];
     
     // 2.设置进度条的value
-    self.progressSlider.value = CMTimeGetSeconds(self.player.currentTime) / CMTimeGetSeconds(self.player.currentItem.duration);
-    self.bottomProgressView.progress = self.progressSlider.value;
+    [self.progressSlider setValue:CMTimeGetSeconds(self.player.currentTime) / CMTimeGetSeconds(self.player.currentItem.duration) animated:YES];
+    [self.bottomProgressView setProgress:self.progressSlider.value animated:YES];
     
     if (CMTimeGetSeconds(self.player.currentTime) / CMTimeGetSeconds(self.player.currentItem.duration) >= 1) {
         [self playFinish];
@@ -442,27 +442,27 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-//    self.playerLayer.frame = self.bounds;
-//    return;
-//    self.imageView.frame = self.bounds;
+    //    self.playerLayer.frame = self.bounds;
+    //    return;
+    //    self.imageView.frame = self.bounds;
     
-//    [CATransaction begin];
-//    // 显式事务默认开启动画效果,kCFBooleanTrue关闭
-//    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-//    // 动画执行时间
-//    [CATransaction setValue:[NSNumber numberWithFloat:0.001f] forKey:kCATransactionAnimationDuration];
-//    
-//    //[CATransaction setAnimationDuration:[NSNumber numberWithFloat:5.0f]];
-//    self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
-//    self.playerLayer.position = CGPointMake(self.width * 0.5, self.height * 0.5);
-//    [CATransaction commit];
+    //    [CATransaction begin];
+    //    // 显式事务默认开启动画效果,kCFBooleanTrue关闭
+    //    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    //    // 动画执行时间
+    //    [CATransaction setValue:[NSNumber numberWithFloat:0.001f] forKey:kCATransactionAnimationDuration];
+    //
+    //    //[CATransaction setAnimationDuration:[NSNumber numberWithFloat:5.0f]];
+    //    self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
+    //    self.playerLayer.position = CGPointMake(self.width * 0.5, self.height * 0.5);
+    //    [CATransaction commit];
     
-//    if (self.isAllowLayerAnimation) {
-//        
-//        self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
-//        self.playerLayer.position = CGPointMake(self.imageView.width * 0.5, self.imageView.height * 0.5);
-//        return;
-//    }
+    //    if (self.isAllowLayerAnimation) {
+    //
+    //        self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
+    //        self.playerLayer.position = CGPointMake(self.imageView.width * 0.5, self.imageView.height * 0.5);
+    //        return;
+    //    }
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
@@ -495,7 +495,7 @@
     [self removeAllObserverKVO];
     
     if (!self.playOrPauseButton.selected) return;
-        
+    
     [self pauseIsByUser:NO];
 }
 
@@ -539,12 +539,12 @@
     self.imageView = imageView;
     
     // 约束
-        imageView.translatesAutoresizingMaskIntoConstraints = NO;
-        NSLayoutConstraint *imageViewTop = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
-        NSLayoutConstraint *imageViewBottom = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-        NSLayoutConstraint *imageViewLeft = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
-        NSLayoutConstraint *imageViewRight = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-        [self addConstraints:@[imageViewTop, imageViewBottom, imageViewLeft, imageViewRight]];
+    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *imageViewTop = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
+    NSLayoutConstraint *imageViewBottom = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+    NSLayoutConstraint *imageViewLeft = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
+    NSLayoutConstraint *imageViewRight = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
+    [self addConstraints:@[imageViewTop, imageViewBottom, imageViewLeft, imageViewRight]];
     
     // 底部工具条及最底部进度条
     [self setupBottomToolView];
@@ -580,6 +580,7 @@
     
     // 最底部进度条
     UIProgressView *bottomProgressView = [[UIProgressView alloc] init];
+    bottomProgressView.clipsToBounds = YES;
     bottomProgressView.trackTintColor = [UIColor clearColor];
     bottomProgressView.progressTintColor = [UIColor redColor];
     [self addSubview:bottomProgressView];
@@ -597,8 +598,8 @@
     JKNohighlightedButton *playOrPauseButton = [JKNohighlightedButton buttonWithType:(UIButtonTypeCustom)];
     [self.bottomToolView addSubview:playOrPauseButton];
     _playOrPauseButton = playOrPauseButton;
-    [playOrPauseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_play@3x.png"]] forState:(UIControlStateNormal)];
-    [playOrPauseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_pause@3x.png"]] forState:(UIControlStateSelected)];
+    [playOrPauseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_play@3x.png"]] forState:(UIControlStateNormal)];
+    [playOrPauseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_pause@3x.png"]] forState:(UIControlStateSelected)];
     // 点击事件
     [playOrPauseButton addTarget:self action:@selector(playOrPause:) forControlEvents:(UIControlEventTouchUpInside)];
     
@@ -623,8 +624,8 @@
     
     // 切换横屏按钮
     UIButton *changeToLandscapeButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
-    [changeToLandscapeButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_to_landscape@2x.png"]] forState:(UIControlStateNormal)];
-    [changeToLandscapeButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_to_portrait@2x.png"]] forState:(UIControlStateSelected)];
+    [changeToLandscapeButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_to_landscape@2x.png"]] forState:(UIControlStateNormal)];
+    [changeToLandscapeButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_to_portrait@2x.png"]] forState:(UIControlStateSelected)];
     [self.bottomToolView addSubview:changeToLandscapeButton];
     _changeToLandscapeButton = changeToLandscapeButton;
     
@@ -656,6 +657,7 @@
     
     // 进度条
     UISlider *slider = [[UISlider alloc] init];
+    slider.clipsToBounds = YES;
     [self.bottomToolView addSubview:slider];
     _progressSlider = slider;
     
@@ -672,8 +674,8 @@
     [self addConstraints:@[sliderLeft, sliderCenterY, sliderRight]];
     
     self.progressSlider.maximumTrackTintColor = [UIColor clearColor];
-    [self.progressSlider setThumbImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_slider_thumbImage@2x.png"]] forState:UIControlStateNormal];
-    [self.progressSlider setMinimumTrackImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_slider_MinimumTrackImage@2x.png"]] forState:UIControlStateNormal];
+    [self.progressSlider setThumbImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_slider_thumbImage@2x.png"]] forState:UIControlStateNormal];
+    [self.progressSlider setMinimumTrackImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_slider_MinimumTrackImage@2x.png"]] forState:UIControlStateNormal];
     
     // 缓存的进度条
     UIProgressView *cacheProgressView = [[UIProgressView alloc] init];
@@ -693,7 +695,7 @@
     
     // 内部的关闭按钮
     UIButton *insideCloseButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
-    [insideCloseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"resource.bundle/images/player_close@3x.png"]] forState:(UIControlStateNormal)];
+    [insideCloseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_close@3x.png"]] forState:(UIControlStateNormal)];
     [self addSubview:insideCloseButton];
     _insideCloseButton = insideCloseButton;
     
