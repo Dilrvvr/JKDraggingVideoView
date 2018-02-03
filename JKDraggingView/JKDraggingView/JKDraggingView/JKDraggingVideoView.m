@@ -10,8 +10,6 @@
 #import "UIView+JKExtension.h"
 #import "JKVideoView.h"
 
-
-
 @interface JKDraggingVideoView () {
     CGPoint FinalCenter;
     CGPoint ScreenCenter;
@@ -654,7 +652,7 @@ static JKDraggingVideoView *vv;
     
     [self changeToSmallWindow];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CABasicAnimation *rotation = [CABasicAnimation animation];
         rotation.keyPath = @"transform.rotation.z";
         rotation.fromValue = @(0);
@@ -664,7 +662,7 @@ static JKDraggingVideoView *vv;
         [self.layer addAnimation:rotation forKey:nil];
     });
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self removeVideoView];
     });
     

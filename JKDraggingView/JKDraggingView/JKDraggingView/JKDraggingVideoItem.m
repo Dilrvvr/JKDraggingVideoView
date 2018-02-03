@@ -43,17 +43,19 @@
 
 // 计算竖屏视频尺寸
 - (void)calculateVideoPortraitSize{
-    if (_videoOriginalSize.width <= JKScreenW && _videoOriginalSize.height <= JKScreenH) {
+    
+    if (_videoOriginalSize.width <= JKScreenW && _videoOriginalSize.height <= (JKIsIphoneX ? JKScreenH - 78 : JKScreenH)) {
         _videoPortraitSize = _videoOriginalSize;
         return;
     }
     
-    if ((_videoOriginalSize.width > JKScreenW) || (_videoOriginalSize.height > JKScreenH)) {
+    if ((_videoOriginalSize.width > JKScreenW) || (_videoOriginalSize.height > (JKIsIphoneX ? JKScreenH - 78 : JKScreenH))) {
+        
         CGFloat W = JKScreenW;
         CGFloat H = JKScreenW * _videoOriginalSize.height / _videoOriginalSize.width;
-        if (H > JKScreenH) {
-            H = JKScreenH;
-            W = JKScreenH * _videoOriginalSize.width / _videoOriginalSize.height;
+        if (H > (JKIsIphoneX ? JKScreenH - 78 : JKScreenH)) {
+            H = (JKIsIphoneX ? JKScreenH - 78 : JKScreenH);
+            W = H * _videoOriginalSize.width / _videoOriginalSize.height;
         }
         _videoPortraitSize = CGSizeMake(W, H);
         return;
