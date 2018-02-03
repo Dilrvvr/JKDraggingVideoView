@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "JKDraggingVideoItem.h"
-#import "JKLandscapeViewController.h"
-#import "JKDraggingView.h"
 
 @interface JKDraggingVideoView : UIView
 

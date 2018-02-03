@@ -7,6 +7,7 @@
 //
 
 @import UIKit;
+#import "JKDraggingVideoViewMacro.h"
 
 @class JKVideoView;
 

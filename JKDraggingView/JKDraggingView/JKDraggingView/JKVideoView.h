@@ -6,8 +6,8 @@
 //  Copyright © 2017年 albert. All rights reserved.
 //
 
-@import UIKit;
-@import AVFoundation;
+#import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 #import "JKDraggingVideoItem.h"
 
 @interface JKVideoView : UIView
@@ -91,6 +91,6 @@
 
 
 
-@interface JKNohighlightedButton : UIButton
+@interface JKDraggingVideoViewNoHighlightedButton : UIButton
 
 @end

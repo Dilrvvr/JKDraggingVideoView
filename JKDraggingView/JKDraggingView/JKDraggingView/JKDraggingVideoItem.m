@@ -20,7 +20,7 @@
     if (self = [super init]) {
         self.autoHideInterval = 5;
         self.bottomProgressColor = [[UIColor redColor] colorWithAlphaComponent:0.7];
-        self.screenInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        self.screenInsets = UIEdgeInsetsMake(JKIsIphoneX ? 54 : 30, 10, JKIsIphoneX ? 44 : 10, 10);
     }
     return self;
 }

@@ -9,6 +9,7 @@
 #import "JKVideoView.h"
 #import "UIView+JKExtension.h"
 #import "NSTimer+JKExtension.h"
+#import "JKDraggingVideoViewPlayerLayerView.h"
 
 @interface JKVideoView () <CALayerDelegate>
 
@@ -24,8 +25,8 @@
 /** AVPlayerItem */
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 
-/** 放置播放器的Layer的imageView */
-@property (nonatomic, weak) UIImageView *imageView;
+/** 放置播放器的Layer的view */
+@property (nonatomic, weak) JKDraggingVideoViewPlayerLayerView *playerLayerView;
 
 /** slogan */
 @property (nonatomic, weak) UIImageView *sloganView;
@@ -71,7 +72,8 @@
  * isShowBottomProgress : 是否显示最底部的进度条
  */
 - (void)showBottomToolView:(BOOL)isShowBottomToolView isShowBottomProgress:(BOOL)isShowBottomProgress{
-    [UIView animateWithDuration:0.25 animations:^{
+    
+    [UIView animateWithDuration:0.5 animations:^{
         self.bottomToolView.alpha = isShowBottomToolView ? 1 : 0;
         self.bottomProgressView.alpha = isShowBottomProgress ? 1 : 0;
         self.zoomButton.alpha = self.bottomToolView.alpha;
@@ -166,8 +168,9 @@
     self.bottomProgressView.progressTintColor = _item.bottomProgressColor;
     
     self.player = [[AVPlayer alloc] init];
-    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
-    [self.imageView.layer addSublayer:self.playerLayer];
+    self.playerLayer = (AVPlayerLayer *)self.playerLayerView.layer;
+    [self.playerLayer setPlayer:self.player];
+//    [self.playerLayerView.layer addSublayer:self.playerLayer];
     
     self.playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:_videoUrl]];
     
@@ -439,12 +442,12 @@
 - (void)setFrame:(CGRect)frame{
     [super setFrame:frame];
 }
-
+/*
 - (void)layoutSubviews{
     [super layoutSubviews];
-    //    self.playerLayer.frame = self.bounds;
+//        self.playerLayer.frame = self.layer.bounds;
     //    return;
-    //    self.imageView.frame = self.bounds;
+    //    self.playerLayerView.frame = self.bounds;
     
     //    [CATransaction begin];
     //    // 显式事务默认开启动画效果,kCFBooleanTrue关闭
@@ -453,27 +456,28 @@
     //    [CATransaction setValue:[NSNumber numberWithFloat:0.001f] forKey:kCATransactionAnimationDuration];
     //
     //    //[CATransaction setAnimationDuration:[NSNumber numberWithFloat:5.0f]];
-    //    self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
+    //    self.playerLayer.bounds = CGRectMake(0, 0, self.playerLayerView.width, self.playerLayerView.height);
     //    self.playerLayer.position = CGPointMake(self.width * 0.5, self.height * 0.5);
     //    [CATransaction commit];
     
     //    if (self.isAllowLayerAnimation) {
     //
-    //        self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
-    //        self.playerLayer.position = CGPointMake(self.imageView.width * 0.5, self.imageView.height * 0.5);
+    //        self.playerLayer.bounds = CGRectMake(0, 0, self.playerLayerView.width, self.playerLayerView.height);
+    //        self.playerLayer.position = CGPointMake(self.playerLayerView.width * 0.5, self.playerLayerView.height * 0.5);
     //        return;
     //    }
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
-    self.playerLayer.bounds = CGRectMake(0, 0, self.imageView.width, self.imageView.height);
-    self.playerLayer.position = CGPointMake(self.imageView.width * 0.5, self.imageView.height * 0.5);
+//    self.playerLayer.bounds = CGRectMake(0, 0, self.playerLayerView.width, self.playerLayerView.height);
+//    self.playerLayer.position = CGPointMake(self.playerLayerView.width * 0.5, self.playerLayerView.height * 0.5);
+    self.playerLayer.frame = self.layer.bounds;
     [CATransaction commit];
-}
+} */
 
-- (void)layoutSublayersOfLayer:(CALayer *)layer{
-    [super layoutSublayersOfLayer:layer];
-}
+//- (void)layoutSublayersOfLayer:(CALayer *)layer{
+//    [super layoutSublayersOfLayer:layer];
+//}
 
 - (void)initialization{
     self.backgroundColor = [UIColor blackColor];
@@ -532,19 +536,18 @@
     NSLayoutConstraint *sloganViewH = [NSLayoutConstraint constraintWithItem:sloganView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:80];
     [self addConstraints:@[sloganViewCenterX, sloganViewCenterY, sloganViewW, sloganViewH]];
     
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.userInteractionEnabled = YES;
-    imageView.clipsToBounds = YES;
-    [self addSubview:imageView];
-    self.imageView = imageView;
+    JKDraggingVideoViewPlayerLayerView *playerLayerView = [[JKDraggingVideoViewPlayerLayerView alloc] init];
+    playerLayerView.clipsToBounds = YES;
+    [self addSubview:playerLayerView];
+    self.playerLayerView = playerLayerView;
     
     // 约束
-    imageView.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *imageViewTop = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
-    NSLayoutConstraint *imageViewBottom = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-    NSLayoutConstraint *imageViewLeft = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
-    NSLayoutConstraint *imageViewRight = [NSLayoutConstraint constraintWithItem:imageView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-    [self addConstraints:@[imageViewTop, imageViewBottom, imageViewLeft, imageViewRight]];
+    playerLayerView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *playerLayerViewTop = [NSLayoutConstraint constraintWithItem:playerLayerView attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
+    NSLayoutConstraint *playerLayerViewBottom = [NSLayoutConstraint constraintWithItem:playerLayerView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+    NSLayoutConstraint *playerLayerViewLeft = [NSLayoutConstraint constraintWithItem:playerLayerView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
+    NSLayoutConstraint *playerLayerViewRight = [NSLayoutConstraint constraintWithItem:playerLayerView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
+    [self addConstraints:@[playerLayerViewTop, playerLayerViewBottom, playerLayerViewLeft, playerLayerViewRight]];
     
     // 底部工具条及最底部进度条
     [self setupBottomToolView];
@@ -564,6 +567,7 @@
 }
 
 - (void)setupBottomToolView{
+    
     // 底部工具条
     UIView *bottomToolView = [[UIView alloc] init];
     bottomToolView.backgroundColor = [UIColor clearColor];
@@ -581,7 +585,7 @@
     // 最底部进度条
     UIProgressView *bottomProgressView = [[UIProgressView alloc] init];
     bottomProgressView.clipsToBounds = YES;
-    bottomProgressView.trackTintColor = [UIColor clearColor];
+    bottomProgressView.trackTintColor = [UIColor lightGrayColor];
     bottomProgressView.progressTintColor = [UIColor redColor];
     [self addSubview:bottomProgressView];
     _bottomProgressView = bottomProgressView;
@@ -591,11 +595,11 @@
     NSLayoutConstraint *bottomProgressViewLeft = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
     NSLayoutConstraint *bottomProgressViewRight = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
     NSLayoutConstraint *bottomProgressViewBottom = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
+    NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:0.5];
     [self addConstraints:@[bottomProgressViewLeft, bottomProgressViewRight, bottomProgressViewBottom, bottomProgressViewH]];
     
     // 开始暂停按钮
-    JKNohighlightedButton *playOrPauseButton = [JKNohighlightedButton buttonWithType:(UIButtonTypeCustom)];
+    JKDraggingVideoViewNoHighlightedButton *playOrPauseButton = [JKDraggingVideoViewNoHighlightedButton buttonWithType:(UIButtonTypeCustom)];
     [self.bottomToolView addSubview:playOrPauseButton];
     _playOrPauseButton = playOrPauseButton;
     [playOrPauseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_play@3x.png"]] forState:(UIControlStateNormal)];
@@ -637,11 +641,11 @@
     NSLayoutConstraint *changeToLandscapeButtonRight = [NSLayoutConstraint constraintWithItem:changeToLandscapeButton attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
     NSLayoutConstraint *changeToLandscapeButtonBottom = [NSLayoutConstraint constraintWithItem:changeToLandscapeButton attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
     NSLayoutConstraint *changeToLandscapeButtonW = [NSLayoutConstraint constraintWithItem:changeToLandscapeButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
-    [self addConstraints:@[changeToLandscapeButtonTop, changeToLandscapeButtonRight, changeToLandscapeButtonBottom, changeToLandscapeButtonW]];
+    [self.bottomToolView addConstraints:@[changeToLandscapeButtonTop, changeToLandscapeButtonRight, changeToLandscapeButtonBottom, changeToLandscapeButtonW]];
     
     // 视频时间
     UILabel *videoTimeLabel = [[UILabel alloc] init];
-    videoTimeLabel.textAlignment = NSTextAlignmentCenter;
+    videoTimeLabel.textAlignment = NSTextAlignmentRight;
     videoTimeLabel.font = [UIFont systemFontOfSize:12];
     videoTimeLabel.textColor = [UIColor whiteColor];
     videoTimeLabel.text = @"--:--/--:--";
@@ -650,10 +654,10 @@
     
     // 约束
     videoTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *videoTimeLabelRight = [NSLayoutConstraint constraintWithItem:videoTimeLabel attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:changeToLandscapeButton attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
+    NSLayoutConstraint *videoTimeLabelRight = [NSLayoutConstraint constraintWithItem:videoTimeLabel attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:changeToLandscapeButton attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
     NSLayoutConstraint *videoTimeLabelCenterY = [NSLayoutConstraint constraintWithItem:videoTimeLabel attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
     NSLayoutConstraint *videoTimeLabelWidth = [NSLayoutConstraint constraintWithItem:videoTimeLabel attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:90];
-    [self addConstraints:@[videoTimeLabelRight, videoTimeLabelCenterY, videoTimeLabelWidth]];
+    [self.bottomToolView addConstraints:@[videoTimeLabelRight, videoTimeLabelCenterY, videoTimeLabelWidth]];
     
     // 进度条
     UISlider *slider = [[UISlider alloc] init];
@@ -668,10 +672,10 @@
     
     // 约束
     slider.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *sliderLeft = [NSLayoutConstraint constraintWithItem:slider attribute:(NSLayoutAttributeLeftMargin) relatedBy:(NSLayoutRelationEqual) toItem:playOrPauseButton attribute:(NSLayoutAttributeRight) multiplier:1 constant:10];
+    NSLayoutConstraint *sliderLeft = [NSLayoutConstraint constraintWithItem:slider attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:playOrPauseButton attribute:(NSLayoutAttributeRight) multiplier:1 constant:10];
     NSLayoutConstraint *sliderCenterY = [NSLayoutConstraint constraintWithItem:slider attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
-    NSLayoutConstraint *sliderRight = [NSLayoutConstraint constraintWithItem:slider attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:videoTimeLabel attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
-    [self addConstraints:@[sliderLeft, sliderCenterY, sliderRight]];
+    NSLayoutConstraint *sliderRight = [NSLayoutConstraint constraintWithItem:slider attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:videoTimeLabel attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
+    [self.bottomToolView addConstraints:@[sliderLeft, sliderCenterY, sliderRight]];
     
     self.progressSlider.maximumTrackTintColor = [UIColor clearColor];
     [self.progressSlider setThumbImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_slider_thumbImage@2x.png"]] forState:UIControlStateNormal];
@@ -721,11 +725,11 @@
     [self showBottomToolView:NO isShowBottomProgress:NO];
     [_bottomToolView removeFromSuperview];
     [_bottomProgressView removeFromSuperview];
-    [_imageView removeFromSuperview];
+    [_playerLayerView removeFromSuperview];
     [_sloganView removeFromSuperview];
     _bottomToolView = nil;
     _bottomProgressView = nil;
-    _imageView = nil;
+    _playerLayerView = nil;
     _sloganView = nil;
     
     !self.closeBlock ? : self.closeBlock();
@@ -770,6 +774,6 @@
 
 
 
-@implementation JKNohighlightedButton
+@implementation JKDraggingVideoViewNoHighlightedButton
 - (void)setHighlighted:(BOOL)highlighted{}
 @end

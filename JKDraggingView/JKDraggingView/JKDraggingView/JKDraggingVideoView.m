@@ -11,11 +11,6 @@
 #import "JKVideoView.h"
 
 
-#define JKMaxCenterX (JKScreenW - self.item.screenInsets.right - self.width * 0.5)
-#define JKMaxCenterY (JKScreenH - self.item.screenInsets.bottom - self.height * 0.5)
-
-#define JKMinCenterX (self.item.screenInsets.left + self.width * 0.5)
-#define JKMinCenterY (self.item.screenInsets.right + self.height * 0.5)
 
 @interface JKDraggingVideoView () {
     CGPoint FinalCenter;
@@ -115,7 +110,7 @@ static JKDraggingVideoView *vv;
         videoView.zoomButton = self.zoomButton;
         
         [self addSubview:videoView.bottomToolView];
-        [self addSubview:videoView.bottomProgressView];
+//        [self addSubview:videoView.bottomProgressView];
         
         __weak typeof(self) weakSelf = self;
         [videoView setPlayFinishedBlock:^{
@@ -203,6 +198,7 @@ static JKDraggingVideoView *vv;
 #pragma mark - 切换横屏
 - (void)switchOrientation:(UIButton *)button{
     [self.videoView switchOrientation:button];
+    
 }
 
 #pragma mark - 拖动进度条
@@ -346,15 +342,25 @@ static JKDraggingVideoView *vv;
 - (void)setupBottomToolView{
     // 底部工具条
     _bottomToolView = self.videoView.bottomToolView;
+    // 最底部进度条
+    _bottomProgressView = self.videoView.bottomProgressView;
+    // 开始暂停按钮
+    _playOrPauseButton = self.videoView.playOrPauseButton;
+    // 切换横屏按钮
+    _changeToLandscapeButton = self.videoView.changeToLandscapeButton;
+    // 视频时间
+    _videoTimeLabel = self.videoView.videoTimeLabel;
+    // 进度条
+    _progressSlider = self.videoView.progressSlider;
     
     // 约束
     _bottomToolView.translatesAutoresizingMaskIntoConstraints = NO;
     NSLayoutConstraint *bottomToolViewLeft = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
     NSLayoutConstraint *bottomToolViewRight = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomToolViewBottom = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+    NSLayoutConstraint *bottomToolViewBottom = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:JKIsIphoneX ? -34 : 0];
     NSLayoutConstraint *bottomToolViewH = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     [self addConstraints:@[bottomToolViewLeft, bottomToolViewRight, bottomToolViewBottom, bottomToolViewH]];
-    
+     /*
     // 最底部进度条
     _bottomProgressView = self.videoView.bottomProgressView;
     
@@ -365,7 +371,7 @@ static JKDraggingVideoView *vv;
     NSLayoutConstraint *bottomProgressViewBottom = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
     NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
     [self addConstraints:@[bottomProgressViewLeft, bottomProgressViewRight, bottomProgressViewBottom, bottomProgressViewH]];
-    
+   
     // 开始暂停按钮
     self.playOrPauseButton = self.videoView.playOrPauseButton;
     
@@ -407,6 +413,7 @@ static JKDraggingVideoView *vv;
     NSLayoutConstraint *sliderCenterY = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
     NSLayoutConstraint *sliderRight = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:_videoTimeLabel attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
     [self addConstraints:@[sliderLeft, sliderCenterY, sliderRight]];
+    */
 }
 
 #pragma mark - 单击和双击手势
@@ -434,7 +441,7 @@ static JKDraggingVideoView *vv;
     
     _isCanAutorotate = YES;
     
-//    [UIView animateWithDuration:0.25 animations:^{
+//    [UIView animateWithDuration:0.5 animations:^{
 //        self.videoView.center = CGPointMake(finalWidth * 0.5, (finalHeight + 40) * 0.5);
 //        
 //        self.height = finalHeight + 40;
@@ -445,12 +452,13 @@ static JKDraggingVideoView *vv;
 //        
 //    }];
     
-    [UIView animateWithDuration:0.25 animations:^{
-        [UIView setAnimationCurve:(UIViewAnimationCurveLinear)];
+    [UIView animateWithDuration:0.5 animations:^{
+//        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
         
         self.frame = JKScreenBounds;
         self.videoView.size = self.item.videoPortraitSize;
         self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+        [self.videoView layoutIfNeeded];
         
     } completion:^(BOOL finished) {
 //        self.videoView.width = self.item.videoPortraitSize.width;
@@ -465,6 +473,7 @@ static JKDraggingVideoView *vv;
         !self.canAutorotateBlock ? : self.canAutorotateBlock(YES);
         
         [self addDoubleTap];
+        [self.videoView showOrHideBottomToolView];
     }];
 }
 
@@ -486,13 +495,14 @@ static JKDraggingVideoView *vv;
         [self.videoView switchOrientation:self.changeToLandscapeButton];
         
         [UIView animateWithDuration:0.5 delay:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
-            [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
+//            [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
             
             [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
             self.size = CGSizeMake(finalWidth, finalHeight);
             self.center = FinalCenter;
             self.videoView.size = CGSizeMake(finalWidth, finalHeight);
             self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+            [self.videoView layoutIfNeeded];
             
         } completion:^(BOOL finished) {
             isFullScreen = NO;
@@ -505,12 +515,15 @@ static JKDraggingVideoView *vv;
         return;
     }
     
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
+//        [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
+        
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         self.size = CGSizeMake(finalWidth, finalHeight);
         self.center = FinalCenter;
         self.videoView.size = CGSizeMake(finalWidth, finalHeight);
         self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+        [self.videoView layoutIfNeeded];
         
     } completion:^(BOOL finished) {
         isFullScreen = NO;
@@ -523,11 +536,13 @@ static JKDraggingVideoView *vv;
 
 #pragma mark - 滑动手势
 - (void)pan:(UIPanGestureRecognizer *)pan{
+    
     if (pan.state == UIGestureRecognizerStateBegan) {
         NSLog(@"UIGestureRecognizerStateBegan");
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         
         _videoView.isAllowLayerAnimation = NO;
+        self.bottomProgressView.hidden = YES;
         
         isDragging = YES;
         !self.canAutorotateBlock ? : self.canAutorotateBlock(NO);
@@ -581,6 +596,8 @@ static JKDraggingVideoView *vv;
     // 手势结束
     if (pan.state != UIGestureRecognizerStateEnded) return;
     
+    self.bottomProgressView.hidden = NO;
+    
     isDragging = NO;
     
     if (isFullScreen) {
@@ -603,7 +620,7 @@ static JKDraggingVideoView *vv;
         return;
     }
     
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
         
         self.centerX = (self.centerX > JKScreenW * 0.5) ? JKMaxCenterX : JKMinCenterX;
         

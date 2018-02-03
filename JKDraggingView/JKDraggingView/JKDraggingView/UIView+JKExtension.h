@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define JKScreenW [UIScreen mainScreen].bounds.size.width
-#define JKScreenH [UIScreen mainScreen].bounds.size.height
-#define JKScreenBounds [UIScreen mainScreen].bounds
-
 @interface UIView (JKExtension)
 /** 尺寸 */
 @property (nonatomic,assign) CGSize size;
