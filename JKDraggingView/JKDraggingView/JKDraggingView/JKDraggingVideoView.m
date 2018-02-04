@@ -253,8 +253,8 @@ static JKDraggingVideoView *vv;
     
     // 关闭按钮
     UIButton *closeButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
-    [closeButton setTitle:@"关闭" forState:(UIControlStateNormal)];
-    closeButton.backgroundColor = [UIColor redColor];
+    closeButton.adjustsImageWhenHighlighted = NO;
+    [closeButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_close_full@3x.png"]] forState:(UIControlStateNormal)];
     [self addSubview:closeButton];
     self.closeButton = closeButton;
     
@@ -270,8 +270,8 @@ static JKDraggingVideoView *vv;
     
     // 缩小为窗口按钮
     UIButton *zoomButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
-    [zoomButton setTitle:@"缩小" forState:(UIControlStateNormal)];
-    zoomButton.backgroundColor = [UIColor orangeColor];
+    zoomButton.adjustsImageWhenHighlighted = NO;
+    [zoomButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_zoom@3x.png"]] forState:(UIControlStateNormal)];
     [self addSubview:zoomButton];
     self.zoomButton = zoomButton;
     
@@ -514,7 +514,7 @@ static JKDraggingVideoView *vv;
         [self.videoView switchOrientation:self.changeToLandscapeButton];
         
         [UIView animateWithDuration:0.5 delay:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
-            //            [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
+//            [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
             
             [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
             self.size = CGSizeMake(finalWidth, finalHeight);
@@ -537,7 +537,7 @@ static JKDraggingVideoView *vv;
     }
     
     [UIView animateWithDuration:0.5 animations:^{
-        //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
+//        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
         
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         self.size = CGSizeMake(finalWidth, finalHeight);

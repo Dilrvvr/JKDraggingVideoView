@@ -199,7 +199,7 @@
             
             CGFloat duration = playerItem.duration.value / playerItem.duration.timescale; // 视频总时间
             NSLog(@"准备好播放了，总时间：%.2f", duration);// 还可以获得播放的进度，这里可以给播放进度条赋值了
-            
+            self.layer.contents = nil;
             [self.middleIndicatorView stopAnimating];
             self.sloganView.hidden = YES;
             [self.playIndicatorView stopAnimating];
