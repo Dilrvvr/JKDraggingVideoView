@@ -9,7 +9,6 @@
 #import "JKVideoView.h"
 #import "UIView+JKExtension.h"
 #import "NSTimer+JKExtension.h"
-#import "JKDraggingVideoViewPlayerLayerView.h"
 
 @interface JKVideoView () <CALayerDelegate>
 
@@ -27,6 +26,9 @@
 
 /** 放置播放器的Layer的view */
 @property (nonatomic, weak) JKDraggingVideoViewPlayerLayerView *playerLayerView;
+
+/** 放置预览图的view 当前直接使用self.layer显示了 */
+@property (nonatomic, weak) UIView *thumView;
 
 /** slogan */
 @property (nonatomic, weak) UIImageView *sloganView;
@@ -158,6 +160,11 @@
     _item = item;
     
     [self resetPlayView];
+    
+    if (_item.videoImage) {
+        
+        self.layer.contents = (__bridge id)_item.videoImage.CGImage;
+    }
     
     _videoUrl = [_item.videoUrl copy];
     [self.middleIndicatorView startAnimating];
@@ -522,6 +529,19 @@
 
 - (void)setupViews{
     
+    UIView *thumView = [[UIView alloc] init];
+    thumView.clipsToBounds = YES;
+    [self insertSubview:thumView atIndex:0];
+    self.thumView = thumView;
+    
+    // 约束
+    thumView.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *thumViewTop = [NSLayoutConstraint constraintWithItem:thumView attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
+    NSLayoutConstraint *thumViewBottom = [NSLayoutConstraint constraintWithItem:thumView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+    NSLayoutConstraint *thumViewLeft = [NSLayoutConstraint constraintWithItem:thumView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
+    NSLayoutConstraint *thumViewRight = [NSLayoutConstraint constraintWithItem:thumView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
+    [self addConstraints:@[thumViewTop, thumViewBottom, thumViewLeft, thumViewRight]];
+    
     // slogan
     UIImageView *sloganView = [[UIImageView alloc] init];
     sloganView.backgroundColor = [UIColor darkGrayColor];
@@ -585,7 +605,7 @@
     // 最底部进度条
     UIProgressView *bottomProgressView = [[UIProgressView alloc] init];
     bottomProgressView.clipsToBounds = YES;
-    bottomProgressView.trackTintColor = [UIColor lightGrayColor];
+    bottomProgressView.trackTintColor = [UIColor grayColor];
     bottomProgressView.progressTintColor = [UIColor redColor];
     [self addSubview:bottomProgressView];
     _bottomProgressView = bottomProgressView;
@@ -595,7 +615,7 @@
     NSLayoutConstraint *bottomProgressViewLeft = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
     NSLayoutConstraint *bottomProgressViewRight = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
     NSLayoutConstraint *bottomProgressViewBottom = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:0.5];
+    NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
     [self addConstraints:@[bottomProgressViewLeft, bottomProgressViewRight, bottomProgressViewBottom, bottomProgressViewH]];
     
     // 开始暂停按钮
@@ -776,4 +796,19 @@
 
 @implementation JKDraggingVideoViewNoHighlightedButton
 - (void)setHighlighted:(BOOL)highlighted{}
+@end
+
+
+@implementation JKDraggingVideoViewPlayerLayerView
+
+/*
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
++ (Class)layerClass{
+    return [AVPlayerLayer class];
+}
 @end

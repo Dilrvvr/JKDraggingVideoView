@@ -94,3 +94,8 @@
 @interface JKDraggingVideoViewNoHighlightedButton : UIButton
 
 @end
+
+
+@interface JKDraggingVideoViewPlayerLayerView : UIView
+
+@end

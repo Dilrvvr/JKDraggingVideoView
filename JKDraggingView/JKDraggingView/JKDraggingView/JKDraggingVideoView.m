@@ -71,7 +71,10 @@ static JKDraggingVideoView *vv;
 + (instancetype)showWithItem:(JKDraggingVideoItem *)item{
     
     if (!vv) {
+        
         vv = [[JKDraggingVideoView alloc] initWithFrame:JKScreenBounds];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOnAutoRotateNotification object:nil];
         
     }else{
         if (!vv.userInteractionEnabled) {
@@ -96,6 +99,22 @@ static JKDraggingVideoView *vv;
     return vv;
 }
 
++ (void)play{
+    
+    vv.playOrPauseButton.selected = NO;
+    [vv.videoView playOrPause:vv.playOrPauseButton];
+}
+
++ (void)pause{
+    
+    vv.playOrPauseButton.selected = YES;
+    [vv.videoView playOrPause:vv.playOrPauseButton];
+}
+
++ (void)close{
+    [vv removeVideoView];
+}
+
 #pragma mark - 设置播放器view
 - (JKVideoView *)videoView{
     if (!_videoView) {
@@ -108,7 +127,7 @@ static JKDraggingVideoView *vv;
         videoView.zoomButton = self.zoomButton;
         
         [self addSubview:videoView.bottomToolView];
-//        [self addSubview:videoView.bottomProgressView];
+        //        [self addSubview:videoView.bottomProgressView];
         
         __weak typeof(self) weakSelf = self;
         [videoView setPlayFinishedBlock:^{
@@ -243,7 +262,7 @@ static JKDraggingVideoView *vv;
     
     // 约束
     closeButton.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *closeButtonTop = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:30];
+    NSLayoutConstraint *closeButtonTop = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:JKIsIphoneX ? 44 : 30];
     NSLayoutConstraint *closeButtonLeft = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:20];
     NSLayoutConstraint *closeButtonWidth = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     NSLayoutConstraint *closeButtonHeight = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
@@ -260,7 +279,7 @@ static JKDraggingVideoView *vv;
     
     // 约束
     zoomButton.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *zoomButtonTop = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:30];
+    NSLayoutConstraint *zoomButtonTop = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:JKIsIphoneX ? 44 : 30];
     NSLayoutConstraint *zoomButtonRight = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:-20];
     NSLayoutConstraint *zoomButtonWidth = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     NSLayoutConstraint *zoomButtonHeight = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
@@ -310,10 +329,10 @@ static JKDraggingVideoView *vv;
         [self changeScreenIsToLandscape:YES];
     }
     
-//    if (orientation ==UIInterfaceOrientationLandscapeLeft) // home键靠左
-//    {
-//        NSLog(@"home键靠左");
-//    }
+    //    if (orientation ==UIInterfaceOrientationLandscapeLeft) // home键靠左
+    //    {
+    //        NSLog(@"home键靠左");
+    //    }
     
     if (orientation == UIInterfaceOrientationPortrait)
     {
@@ -358,60 +377,60 @@ static JKDraggingVideoView *vv;
     NSLayoutConstraint *bottomToolViewBottom = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:JKIsIphoneX ? -34 : 0];
     NSLayoutConstraint *bottomToolViewH = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     [self addConstraints:@[bottomToolViewLeft, bottomToolViewRight, bottomToolViewBottom, bottomToolViewH]];
-     /*
-    // 最底部进度条
-    _bottomProgressView = self.videoView.bottomProgressView;
-    
-    // 约束
-    _bottomProgressView.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *bottomProgressViewLeft = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomProgressViewRight = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomProgressViewBottom = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
-    [self addConstraints:@[bottomProgressViewLeft, bottomProgressViewRight, bottomProgressViewBottom, bottomProgressViewH]];
-   
-    // 开始暂停按钮
-    self.playOrPauseButton = self.videoView.playOrPauseButton;
-    
-    // 约束
-    _playOrPauseButton.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *playOrPauseButtonLeft = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
-    NSLayoutConstraint *playOrPauseButtonTop = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
-    NSLayoutConstraint *playOrPauseButtonBottom = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-    NSLayoutConstraint *playOrPauseButtonW = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
-    [self.bottomToolView addConstraints:@[playOrPauseButtonLeft, playOrPauseButtonTop, playOrPauseButtonBottom, playOrPauseButtonW]];
-    
-    // 切换横屏按钮
-    self.changeToLandscapeButton = self.videoView.changeToLandscapeButton;
-    
-    // 约束
-    _changeToLandscapeButton.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *changeToLandscapeButtonTop = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
-    NSLayoutConstraint *changeToLandscapeButtonRight = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-    NSLayoutConstraint *changeToLandscapeButtonBottom = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
-    NSLayoutConstraint *changeToLandscapeButtonW = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
-    [self addConstraints:@[changeToLandscapeButtonTop, changeToLandscapeButtonRight, changeToLandscapeButtonBottom, changeToLandscapeButtonW]];
-    
-    // 视频时间
-    self.videoTimeLabel = self.videoView.videoTimeLabel;
-    
-    // 约束
-    _videoTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *videoTimeLabelRight = [NSLayoutConstraint constraintWithItem:_videoTimeLabel attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:_changeToLandscapeButton attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
-    NSLayoutConstraint *videoTimeLabelCenterY = [NSLayoutConstraint constraintWithItem:_videoTimeLabel attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
-    NSLayoutConstraint *videoTimeLabelWidth = [NSLayoutConstraint constraintWithItem:_videoTimeLabel attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:90];
-    [self addConstraints:@[videoTimeLabelRight, videoTimeLabelCenterY, videoTimeLabelWidth]];
-    
-    // 进度条
-    self.progressSlider = self.videoView.progressSlider;
-    
-    // 约束
-    _progressSlider.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *sliderLeft = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeLeftMargin) relatedBy:(NSLayoutRelationEqual) toItem:_playOrPauseButton attribute:(NSLayoutAttributeRight) multiplier:1 constant:10];
-    NSLayoutConstraint *sliderCenterY = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
-    NSLayoutConstraint *sliderRight = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:_videoTimeLabel attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
-    [self addConstraints:@[sliderLeft, sliderCenterY, sliderRight]];
-    */
+    /*
+     // 最底部进度条
+     _bottomProgressView = self.videoView.bottomProgressView;
+     
+     // 约束
+     _bottomProgressView.translatesAutoresizingMaskIntoConstraints = NO;
+     NSLayoutConstraint *bottomProgressViewLeft = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
+     NSLayoutConstraint *bottomProgressViewRight = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
+     NSLayoutConstraint *bottomProgressViewBottom = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+     NSLayoutConstraint *bottomProgressViewH = [NSLayoutConstraint constraintWithItem:_bottomProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
+     [self addConstraints:@[bottomProgressViewLeft, bottomProgressViewRight, bottomProgressViewBottom, bottomProgressViewH]];
+     
+     // 开始暂停按钮
+     self.playOrPauseButton = self.videoView.playOrPauseButton;
+     
+     // 约束
+     _playOrPauseButton.translatesAutoresizingMaskIntoConstraints = NO;
+     NSLayoutConstraint *playOrPauseButtonLeft = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
+     NSLayoutConstraint *playOrPauseButtonTop = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
+     NSLayoutConstraint *playOrPauseButtonBottom = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+     NSLayoutConstraint *playOrPauseButtonW = [NSLayoutConstraint constraintWithItem:_playOrPauseButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
+     [self.bottomToolView addConstraints:@[playOrPauseButtonLeft, playOrPauseButtonTop, playOrPauseButtonBottom, playOrPauseButtonW]];
+     
+     // 切换横屏按钮
+     self.changeToLandscapeButton = self.videoView.changeToLandscapeButton;
+     
+     // 约束
+     _changeToLandscapeButton.translatesAutoresizingMaskIntoConstraints = NO;
+     NSLayoutConstraint *changeToLandscapeButtonTop = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
+     NSLayoutConstraint *changeToLandscapeButtonRight = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
+     NSLayoutConstraint *changeToLandscapeButtonBottom = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+     NSLayoutConstraint *changeToLandscapeButtonW = [NSLayoutConstraint constraintWithItem:_changeToLandscapeButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
+     [self addConstraints:@[changeToLandscapeButtonTop, changeToLandscapeButtonRight, changeToLandscapeButtonBottom, changeToLandscapeButtonW]];
+     
+     // 视频时间
+     self.videoTimeLabel = self.videoView.videoTimeLabel;
+     
+     // 约束
+     _videoTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
+     NSLayoutConstraint *videoTimeLabelRight = [NSLayoutConstraint constraintWithItem:_videoTimeLabel attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:_changeToLandscapeButton attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
+     NSLayoutConstraint *videoTimeLabelCenterY = [NSLayoutConstraint constraintWithItem:_videoTimeLabel attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
+     NSLayoutConstraint *videoTimeLabelWidth = [NSLayoutConstraint constraintWithItem:_videoTimeLabel attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:90];
+     [self addConstraints:@[videoTimeLabelRight, videoTimeLabelCenterY, videoTimeLabelWidth]];
+     
+     // 进度条
+     self.progressSlider = self.videoView.progressSlider;
+     
+     // 约束
+     _progressSlider.translatesAutoresizingMaskIntoConstraints = NO;
+     NSLayoutConstraint *sliderLeft = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeLeftMargin) relatedBy:(NSLayoutRelationEqual) toItem:_playOrPauseButton attribute:(NSLayoutAttributeRight) multiplier:1 constant:10];
+     NSLayoutConstraint *sliderCenterY = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:self.bottomToolView attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:0];
+     NSLayoutConstraint *sliderRight = [NSLayoutConstraint constraintWithItem:_progressSlider attribute:(NSLayoutAttributeRightMargin) relatedBy:(NSLayoutRelationEqual) toItem:_videoTimeLabel attribute:(NSLayoutAttributeLeft) multiplier:1 constant:-10];
+     [self addConstraints:@[sliderLeft, sliderCenterY, sliderRight]];
+     */
 }
 
 #pragma mark - 单击和双击手势
@@ -439,19 +458,19 @@ static JKDraggingVideoView *vv;
     
     _isCanAutorotate = YES;
     
-//    [UIView animateWithDuration:0.5 animations:^{
-//        self.videoView.center = CGPointMake(finalWidth * 0.5, (finalHeight + 40) * 0.5);
-//        
-//        self.height = finalHeight + 40;
-//        self.centerY = FinalCenter.y - 20;
-//        
-//    } completion:^(BOOL finished) {
-//        
-//        
-//    }];
+    //    [UIView animateWithDuration:0.5 animations:^{
+    //        self.videoView.center = CGPointMake(finalWidth * 0.5, (finalHeight + 40) * 0.5);
+    //
+    //        self.height = finalHeight + 40;
+    //        self.centerY = FinalCenter.y - 20;
+    //
+    //    } completion:^(BOOL finished) {
+    //
+    //
+    //    }];
     
     [UIView animateWithDuration:0.5 animations:^{
-//        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
+        //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
         
         self.frame = JKScreenBounds;
         self.videoView.size = self.item.videoPortraitSize;
@@ -459,8 +478,8 @@ static JKDraggingVideoView *vv;
         [self.videoView layoutIfNeeded];
         
     } completion:^(BOOL finished) {
-//        self.videoView.width = self.item.videoPortraitSize.width;
-//        self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+        //        self.videoView.width = self.item.videoPortraitSize.width;
+        //        self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
         
         isFullScreen = YES;
         isSmallWindow = NO;
@@ -472,6 +491,8 @@ static JKDraggingVideoView *vv;
         
         [self addDoubleTap];
         [self.videoView showOrHideBottomToolView];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOnAutoRotateNotification object:nil];
     }];
 }
 
@@ -493,7 +514,7 @@ static JKDraggingVideoView *vv;
         [self.videoView switchOrientation:self.changeToLandscapeButton];
         
         [UIView animateWithDuration:0.5 delay:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
-//            [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
+            //            [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
             
             [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
             self.size = CGSizeMake(finalWidth, finalHeight);
@@ -509,12 +530,14 @@ static JKDraggingVideoView *vv;
             isDragging = NO;
             self.videoView.insideCloseButton.hidden = NO;
             self.bottomProgressView.hidden = NO;
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
         }];
         return;
     }
     
     [UIView animateWithDuration:0.5 animations:^{
-//        [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
+        //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseOut)];
         
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         self.size = CGSizeMake(finalWidth, finalHeight);
@@ -529,6 +552,8 @@ static JKDraggingVideoView *vv;
         distance = (FinalCenter.y - ScreenCenter.y);
         self.videoView.insideCloseButton.hidden = NO;
         self.bottomProgressView.hidden = NO;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
     }];
 }
 
@@ -576,7 +601,7 @@ static JKDraggingVideoView *vv;
         self.height = JKScreenH - (JKScreenH - finalHeight) * distance / (FinalCenter.y - ScreenCenter.y);
         self.width = JKScreenW - (JKScreenW - finalWidth) * distance / (FinalCenter.y - ScreenCenter.y);
         
-//        self.videoView.transform = CGAffineTransformMakeScale(1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKScreenW), 1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKScreenW));
+        //        self.videoView.transform = CGAffineTransformMakeScale(1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKScreenW), 1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKScreenW));
         
         
         self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
@@ -650,9 +675,13 @@ static JKDraggingVideoView *vv;
         [self.videoView switchOrientation:self.changeToLandscapeButton];
     }
     
-    [self changeToSmallWindow];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [self changeToSmallWindow];
+    });
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CABasicAnimation *rotation = [CABasicAnimation animation];
         rotation.keyPath = @"transform.rotation.z";
         rotation.fromValue = @(0);
@@ -662,34 +691,39 @@ static JKDraggingVideoView *vv;
         [self.layer addAnimation:rotation forKey:nil];
     });
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self removeVideoView];
     });
     
-//    [UIView animateWithDuration:3 delay:0.5 options:UIViewAnimationOptionCurveLinear animations:^{
-//        [UIView setAnimationRepeatCount:2];
-////        self.transform = CGAffineTransformMakeRotation(M_PI - 0.001);
-////        self.transform = CGAffineTransformRotate(CGAffineTransformMakeRotation(M_PI - 0.001), M_PI - 0.001);
-//        
-//        
-//        //1.围绕X轴旋转
-//        //self.myIMV.layer.transform=CATransform3DRotate(self.myIMV.layer.transform, M_PI/60, 1, 0, 0);
-//        //2.围绕Y轴旋转
-//        //self.myIMV.layer.transform=CATransform3DRotate(self.myIMV.layer.transform, M_PI/60, 0, 1, 0);
-//        //3.围绕Z轴旋转
-////        self.layer.transform = CATransform3DRotate(self.layer.transform, M_PI * 2, 0, 0, 1);
-//        
-//        
-//        
-//    } completion:^(BOOL finished) {
-//        
-//        self.transform = CGAffineTransformIdentity;
-//        [self removeVideoView];
-//    }];
+    //    [UIView animateWithDuration:3 delay:0.5 options:UIViewAnimationOptionCurveLinear animations:^{
+    //        [UIView setAnimationRepeatCount:2];
+    ////        self.transform = CGAffineTransformMakeRotation(M_PI - 0.001);
+    ////        self.transform = CGAffineTransformRotate(CGAffineTransformMakeRotation(M_PI - 0.001), M_PI - 0.001);
+    //
+    //
+    //        //1.围绕X轴旋转
+    //        //self.myIMV.layer.transform=CATransform3DRotate(self.myIMV.layer.transform, M_PI/60, 1, 0, 0);
+    //        //2.围绕Y轴旋转
+    //        //self.myIMV.layer.transform=CATransform3DRotate(self.myIMV.layer.transform, M_PI/60, 0, 1, 0);
+    //        //3.围绕Z轴旋转
+    ////        self.layer.transform = CATransform3DRotate(self.layer.transform, M_PI * 2, 0, 0, 1);
+    //
+    //
+    //
+    //    } completion:^(BOOL finished) {
+    //
+    //        self.transform = CGAffineTransformIdentity;
+    //        [self removeVideoView];
+    //    }];
 }
 
 - (void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"%d, %s",__LINE__, __func__);
 }
 @end
+
+

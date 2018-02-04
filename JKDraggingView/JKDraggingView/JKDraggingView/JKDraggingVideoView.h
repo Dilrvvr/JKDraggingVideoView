@@ -24,4 +24,10 @@
 @property (nonatomic, copy) void (^canAutorotateBlock)(BOOL isCanAutorotate);
 
 + (instancetype)showWithItem:(JKDraggingVideoItem *)item;
+
++ (void)play;
+
++ (void)pause;
+
++ (void)close;
 @end

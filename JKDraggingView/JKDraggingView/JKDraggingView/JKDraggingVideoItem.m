@@ -44,17 +44,17 @@
 // 计算竖屏视频尺寸
 - (void)calculateVideoPortraitSize{
     
-    if (_videoOriginalSize.width <= JKScreenW && _videoOriginalSize.height <= (JKIsIphoneX ? JKScreenH - 78 : JKScreenH)) {
+    if (_videoOriginalSize.width <= JKScreenW && _videoOriginalSize.height <= (JKIsIphoneX ? JKScreenH - 88 : JKScreenH)) {
         _videoPortraitSize = _videoOriginalSize;
         return;
     }
     
-    if ((_videoOriginalSize.width > JKScreenW) || (_videoOriginalSize.height > (JKIsIphoneX ? JKScreenH - 78 : JKScreenH))) {
+    if ((_videoOriginalSize.width > JKScreenW) || (_videoOriginalSize.height > (JKIsIphoneX ? JKScreenH - 88 : JKScreenH))) {
         
         CGFloat W = JKScreenW;
         CGFloat H = JKScreenW * _videoOriginalSize.height / _videoOriginalSize.width;
-        if (H > (JKIsIphoneX ? JKScreenH - 78 : JKScreenH)) {
-            H = (JKIsIphoneX ? JKScreenH - 78 : JKScreenH);
+        if (H > (JKIsIphoneX ? JKScreenH - 88 : JKScreenH)) {
+            H = (JKIsIphoneX ? JKScreenH - 88 : JKScreenH);
             W = H * _videoOriginalSize.width / _videoOriginalSize.height;
         }
         _videoPortraitSize = CGSizeMake(W, H);
@@ -64,14 +64,15 @@
 
 // 计算横屏视频尺寸
 - (void)calculateVideoLandscapeSize{
-    if (_videoOriginalSize.width <= JKScreenH && _videoOriginalSize.height <= JKScreenW) {
+    
+    if (_videoOriginalSize.width <= (JKIsIphoneX ? JKScreenH - 88 : JKScreenH) && _videoOriginalSize.height <= JKScreenW) {
         _videoLandscapeSize = _videoOriginalSize;
         return;
     }
     
-    if ((_videoOriginalSize.width > JKScreenH) || (_videoOriginalSize.height > JKScreenW)) {
-        CGFloat W = JKScreenH;
-        CGFloat H = JKScreenH * _videoOriginalSize.height / _videoOriginalSize.width;
+    if ((_videoOriginalSize.width > (JKIsIphoneX ? JKScreenH - 88 : JKScreenH)) || (_videoOriginalSize.height > JKScreenW)) {
+        CGFloat W = (JKIsIphoneX ? JKScreenH - 88 : JKScreenH);
+        CGFloat H = W * _videoOriginalSize.height / _videoOriginalSize.width;
         if (H > JKScreenW) {
             H = JKScreenW;
             W = JKScreenW * _videoOriginalSize.width / _videoOriginalSize.height;

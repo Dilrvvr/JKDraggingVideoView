@@ -10,7 +10,6 @@
 		5022ECD61E7E639900F91AA3 /* JKDraggingVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022ECD51E7E639900F91AA3 /* JKDraggingVideoView.m */; };
 		5022ECD91E7E63BA00F91AA3 /* JKDraggingVideoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022ECD81E7E63BA00F91AA3 /* JKDraggingVideoItem.m */; };
 		5022ECDC1E7E6FEE00F91AA3 /* JKVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5022ECDB1E7E6FEE00F91AA3 /* JKVideoView.m */; };
-		502C84832025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 502C84822025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.m */; };
 		5070BE2E1E7D1EC600739AAE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070BE2D1E7D1EC600739AAE /* main.m */; };
 		5070BE311E7D1EC600739AAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5070BE301E7D1EC600739AAE /* AppDelegate.m */; };
 		5070BE371E7D1EC600739AAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5070BE351E7D1EC600739AAE /* Main.storyboard */; };
@@ -53,8 +52,6 @@
 		5022ECDA1E7E6FEE00F91AA3 /* JKVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JKVideoView.h; sourceTree = "<group>"; };
 		5022ECDB1E7E6FEE00F91AA3 /* JKVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JKVideoView.m; sourceTree = "<group>"; };
 		502C84802025A6AC0078239F /* JKDraggingVideoViewMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKDraggingVideoViewMacro.h; sourceTree = "<group>"; };
-		502C84812025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JKDraggingVideoViewPlayerLayerView.h; sourceTree = "<group>"; };
-		502C84822025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JKDraggingVideoViewPlayerLayerView.m; sourceTree = "<group>"; };
 		5070BE291E7D1EC600739AAE /* JKDraggingView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JKDraggingView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5070BE2D1E7D1EC600739AAE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5070BE2F1E7D1EC600739AAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -196,8 +193,6 @@
 				5022ECD81E7E63BA00F91AA3 /* JKDraggingVideoItem.m */,
 				5022ECDA1E7E6FEE00F91AA3 /* JKVideoView.h */,
 				5022ECDB1E7E6FEE00F91AA3 /* JKVideoView.m */,
-				502C84812025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.h */,
-				502C84822025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.m */,
 				50C6AD5A1EC75F6D002FF568 /* JKVideoViewResource.bundle */,
 			);
 			path = JKDraggingView;
@@ -341,7 +336,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5022ECD61E7E639900F91AA3 /* JKDraggingVideoView.m in Sources */,
-				502C84832025B58E0078239F /* JKDraggingVideoViewPlayerLayerView.m in Sources */,
 				5022ECD91E7E63BA00F91AA3 /* JKDraggingVideoItem.m in Sources */,
 				5070BE311E7D1EC600739AAE /* AppDelegate.m in Sources */,
 				509EA7C81E7FDF2E008A17F6 /* ThirdViewController.m in Sources */,

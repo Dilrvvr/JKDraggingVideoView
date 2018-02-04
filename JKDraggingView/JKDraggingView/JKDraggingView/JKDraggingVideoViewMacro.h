@@ -29,7 +29,11 @@
 
 
 
+/** 开启自动旋转 通知名字 */
+#define JKTurnOnAutoRotateNotification  @"JKTurnOnAutoRotateNotification"
 
+/** 关闭自动旋转 通知名字 */
+#define JKTurnOffAutoRotateNotification  @"JKTurnOffAutoRotateNotification"
 
 
 

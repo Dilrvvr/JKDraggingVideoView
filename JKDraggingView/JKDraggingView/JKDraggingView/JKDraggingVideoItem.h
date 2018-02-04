@@ -27,6 +27,9 @@
 /** 最底部没有工具栏时显示的进度条的颜色 默认红色 */
 @property (nonatomic, strong) UIColor *bottomProgressColor;
 
+/** 视频的预览图 */
+@property (nonatomic, strong) UIImage *videoImage;
+
 
 /** 视频竖屏尺寸 */
 @property (nonatomic, assign, readonly) CGSize videoPortraitSize;
