@@ -7,9 +7,13 @@
 //
 
 #import "MyNavController.h"
+#import "AppDelegate.h"
+#import "JKDraggingVideoViewMacro.h"
 
 @interface MyNavController ()
 
+/** 是否允许自动旋转 */
+@property (nonatomic, assign) BOOL canAutoRotate;
 @end
 
 @implementation MyNavController
@@ -20,16 +24,55 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canRotate) name:JKTurnOnAutoRotateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canNotRotate) name:JKTurnOffAutoRotateNotification object:nil];
 }
 
-//- (BOOL)shouldAutorotate{
-//    return NO;
-//}
-//
-//- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-//    return UIInterfaceOrientationMaskPortrait;
-//}
+- (void)canRotate{
+    
+    self.canAutoRotate = YES;
+    
+    [(AppDelegate *)[UIApplication sharedApplication].delegate setIsCanAutoRotate:YES];
+    
+    if (@available(iOS 11.0, *)) {
+        [self setNeedsUpdateOfHomeIndicatorAutoHidden];
+    } else {
+        // Fallback on earlier versions
+    }
+}
+
+- (void)canNotRotate{
+    self.canAutoRotate = NO;
+    [(AppDelegate *)[UIApplication sharedApplication].delegate setIsCanAutoRotate:NO];
+    
+    if (@available(iOS 11.0, *)) {
+        [self setNeedsUpdateOfHomeIndicatorAutoHidden];
+    } else {
+        // Fallback on earlier versions
+    }
+}
+
+- (UIViewController *)childViewControllerForHomeIndicatorAutoHidden{
+    return nil;
+}
+
+- (BOOL)shouldAutorotate{
+    return self.canAutoRotate;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    
+    return self.canAutoRotate ? UIInterfaceOrientationMaskPortrait |UIInterfaceOrientationMaskLandscapeRight : UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    return self.canAutoRotate ? UIInterfaceOrientationPortrait | UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait ;
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

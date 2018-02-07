@@ -60,6 +60,13 @@
 
 @implementation JKVideoView
 
++ (void)initialize{
+    
+    // 静音也可以有声音
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+}
+
 + (instancetype)viewWithItem:(JKDraggingVideoItem *)item frame:(CGRect)frame{
     JKVideoView *videoView = [[JKVideoView alloc] initWithFrame:frame];
     videoView.item = item;
@@ -446,9 +453,6 @@
     return self;
 }
 
-- (void)setFrame:(CGRect)frame{
-    [super setFrame:frame];
-}
 /*
 - (void)layoutSubviews{
     [super layoutSubviews];
@@ -467,13 +471,6 @@
     //    self.playerLayer.position = CGPointMake(self.width * 0.5, self.height * 0.5);
     //    [CATransaction commit];
     
-    //    if (self.isAllowLayerAnimation) {
-    //
-    //        self.playerLayer.bounds = CGRectMake(0, 0, self.playerLayerView.width, self.playerLayerView.height);
-    //        self.playerLayer.position = CGPointMake(self.playerLayerView.width * 0.5, self.playerLayerView.height * 0.5);
-    //        return;
-    //    }
-    
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
 //    self.playerLayer.bounds = CGRectMake(0, 0, self.playerLayerView.width, self.playerLayerView.height);
@@ -482,16 +479,8 @@
     [CATransaction commit];
 } */
 
-//- (void)layoutSublayersOfLayer:(CALayer *)layer{
-//    [super layoutSublayersOfLayer:layer];
-//}
-
 - (void)initialization{
     self.backgroundColor = [UIColor blackColor];
-    
-    // 静音也可以有声音
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
     
     [self setupViews];
     
@@ -619,7 +608,8 @@
     [self addConstraints:@[bottomProgressViewLeft, bottomProgressViewRight, bottomProgressViewBottom, bottomProgressViewH]];
     
     // 开始暂停按钮
-    JKDraggingVideoViewNoHighlightedButton *playOrPauseButton = [JKDraggingVideoViewNoHighlightedButton buttonWithType:(UIButtonTypeCustom)];
+    UIButton *playOrPauseButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
+    playOrPauseButton.adjustsImageWhenHighlighted = NO;
     [self.bottomToolView addSubview:playOrPauseButton];
     _playOrPauseButton = playOrPauseButton;
     [playOrPauseButton setImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_play@3x.png"]] forState:(UIControlStateNormal)];
@@ -793,21 +783,8 @@
 
 
 
-
-@implementation JKDraggingVideoViewNoHighlightedButton
-- (void)setHighlighted:(BOOL)highlighted{}
-@end
-
-
 @implementation JKDraggingVideoViewPlayerLayerView
 
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code
- }
- */
 + (Class)layerClass{
     return [AVPlayerLayer class];
 }

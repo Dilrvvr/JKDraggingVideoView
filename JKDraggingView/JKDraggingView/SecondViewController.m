@@ -31,12 +31,7 @@
     
     item.videoUrl = @"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4";
     item.videoOriginalSize = CGSizeMake(640, 360);
-    self.draggingVideoView = [JKDraggingVideoView showWithItem:item];
-    
-//    __weak typeof(self) weakSelf = self;
-    [self.draggingVideoView setCanAutorotateBlock:^(BOOL isCanAutorotate) {
-        [SecondViewController attemptRotationToDeviceOrientation];
-    }];
+    [JKDraggingVideoView showWithItem:item];
 }
 
 - (IBAction)pipiXia:(id)sender {
@@ -44,22 +39,14 @@
     
     item.videoUrl = @"http://wvideo.spriteapp.cn/video/2017/0316/58ca1d7a66750_wpd.mp4";
     item.videoOriginalSize = CGSizeMake(480, 640);
-    self.draggingVideoView = [JKDraggingVideoView showWithItem:item];
+    [JKDraggingVideoView showWithItem:item];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
     if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        return self.draggingVideoView.isCanAutorotate;
+        return self.draggingVideoView;
     }
     return YES;
-}
-
-- (BOOL)shouldAutorotate{
-    return YES;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-    return UIInterfaceOrientationMaskLandscape | UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)didReceiveMemoryWarning {

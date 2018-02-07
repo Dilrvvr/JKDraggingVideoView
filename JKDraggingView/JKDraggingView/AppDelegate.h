@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+/** 是否横屏 */
+@property (nonatomic, assign) BOOL isCanAutoRotate;
 
 @end
 

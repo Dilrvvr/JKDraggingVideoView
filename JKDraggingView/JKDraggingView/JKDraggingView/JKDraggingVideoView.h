@@ -14,14 +14,8 @@
 /** 配置的模型 */
 @property (nonatomic, strong, readonly) JKDraggingVideoItem *item;
 
-/** 是否可以自动旋转 */
-@property (nonatomic, assign, readonly) BOOL isCanAutorotate;
-
 /** 监听放大和缩小的block */
 @property (nonatomic, copy) void (^changeToSmallWindowBlock)(BOOL isSmallWindow);
-
-/** 监听是否可以自动旋转的block */
-@property (nonatomic, copy) void (^canAutorotateBlock)(BOOL isCanAutorotate);
 
 + (instancetype)showWithItem:(JKDraggingVideoItem *)item;
 

@@ -450,24 +450,9 @@ static JKDraggingVideoView *vv;
 #pragma mark - 全屏\小窗切换
 - (void)changeToFullScreen{
     
-    _videoView.isAllowLayerAnimation = YES;
-    
     [UIView changeInterfaceOrientation:(UIInterfaceOrientationPortrait)];
     
     _videoView.insideCloseButton.hidden = YES;
-    
-    _isCanAutorotate = YES;
-    
-    //    [UIView animateWithDuration:0.5 animations:^{
-    //        self.videoView.center = CGPointMake(finalWidth * 0.5, (finalHeight + 40) * 0.5);
-    //
-    //        self.height = finalHeight + 40;
-    //        self.centerY = FinalCenter.y - 20;
-    //
-    //    } completion:^(BOOL finished) {
-    //
-    //
-    //    }];
     
     [UIView animateWithDuration:0.5 animations:^{
         //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
@@ -478,16 +463,12 @@ static JKDraggingVideoView *vv;
         [self.videoView layoutIfNeeded];
         
     } completion:^(BOOL finished) {
-        //        self.videoView.width = self.item.videoPortraitSize.width;
-        //        self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
         
         isFullScreen = YES;
         isSmallWindow = NO;
         distance = 0;
         isDragging = NO;
         [UIApplication sharedApplication].statusBarHidden = YES;
-        
-        !self.canAutorotateBlock ? : self.canAutorotateBlock(YES);
         
         [self addDoubleTap];
         [self.videoView showOrHideBottomToolView];
@@ -498,17 +479,13 @@ static JKDraggingVideoView *vv;
 
 - (void)changeToSmallWindow{
     
-    _videoView.isAllowLayerAnimation = YES;
-    
     [self removeGestureRecognizer:self.doubleTap];
     
     [UIApplication sharedApplication].statusBarHidden = NO;
     
     self.bottomProgressView.hidden = YES;
     
-    !self.canAutorotateBlock ? : self.canAutorotateBlock(NO);
-    
-    _isCanAutorotate = NO;
+    [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
     
     if (self.changeToLandscapeButton.selected) {
         [self.videoView switchOrientation:self.changeToLandscapeButton];
@@ -530,8 +507,6 @@ static JKDraggingVideoView *vv;
             isDragging = NO;
             self.videoView.insideCloseButton.hidden = NO;
             self.bottomProgressView.hidden = NO;
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
         }];
         return;
     }
@@ -564,12 +539,11 @@ static JKDraggingVideoView *vv;
         NSLog(@"UIGestureRecognizerStateBegan");
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         
-        _videoView.isAllowLayerAnimation = NO;
         self.bottomProgressView.hidden = YES;
         
         isDragging = YES;
-        !self.canAutorotateBlock ? : self.canAutorotateBlock(NO);
-        _isCanAutorotate = NO;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
         
         if (!self.changeToLandscapeButton.selected) {
             
@@ -626,6 +600,7 @@ static JKDraggingVideoView *vv;
     if (isFullScreen) {
         
         if (self.y > JKScreenH * 0.5) { // 缩小
+            
             [self changeToSmallWindow];
             
         }else{

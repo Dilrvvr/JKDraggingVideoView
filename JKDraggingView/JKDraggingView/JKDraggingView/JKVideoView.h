@@ -41,9 +41,6 @@
 /** 底部进度条 */
 @property (nonatomic, weak, readonly) UIProgressView *bottomProgressView;
 
-/** 是否允许layer的隐式动画 */
-@property (nonatomic, assign) BOOL isAllowLayerAnimation;
-
 /** 监听播放完毕的block */
 @property (nonatomic, copy) void (^playFinishedBlock)();
 
@@ -86,14 +83,6 @@
 - (void)resetPlayView;
 @end
 
-
-
-
-
-
-@interface JKDraggingVideoViewNoHighlightedButton : UIButton
-
-@end
 
 
 @interface JKDraggingVideoViewPlayerLayerView : UIView
