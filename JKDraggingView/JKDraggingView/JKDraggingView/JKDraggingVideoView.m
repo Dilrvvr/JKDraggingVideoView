@@ -543,8 +543,6 @@ static JKDraggingVideoView *vv;
         
         isDragging = YES;
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
-        
         if (!self.changeToLandscapeButton.selected) {
             
             [UIApplication sharedApplication].statusBarHidden = NO;
