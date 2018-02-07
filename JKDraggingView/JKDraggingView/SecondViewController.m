@@ -42,12 +42,12 @@
     [JKDraggingVideoView showWithItem:item];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
-    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        return self.draggingVideoView;
-    }
-    return YES;
-}
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
+//    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+//        return self.draggingVideoView;
+//    }
+//    return YES;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -26,13 +26,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)shouldAutorotate{
-    return NO;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-    return UIInterfaceOrientationMaskPortrait;
-}
+//- (BOOL)shouldAutorotate{
+//    return NO;
+//}
+//
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+//    return UIInterfaceOrientationMaskPortrait;
+//}
 
 /*
  #pragma mark - Navigation

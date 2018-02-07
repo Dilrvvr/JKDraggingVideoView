@@ -485,8 +485,6 @@ static JKDraggingVideoView *vv;
     
     self.bottomProgressView.hidden = YES;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
-    
     if (self.changeToLandscapeButton.selected) {
         [self.videoView switchOrientation:self.changeToLandscapeButton];
         
@@ -507,6 +505,8 @@ static JKDraggingVideoView *vv;
             isDragging = NO;
             self.videoView.insideCloseButton.hidden = NO;
             self.bottomProgressView.hidden = NO;
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
         }];
         return;
     }

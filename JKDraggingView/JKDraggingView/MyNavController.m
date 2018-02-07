@@ -43,7 +43,9 @@
 }
 
 - (void)canNotRotate{
+    
     self.canAutoRotate = NO;
+    
     [(AppDelegate *)[UIApplication sharedApplication].delegate setIsCanAutoRotate:NO];
     
     if (@available(iOS 11.0, *)) {
