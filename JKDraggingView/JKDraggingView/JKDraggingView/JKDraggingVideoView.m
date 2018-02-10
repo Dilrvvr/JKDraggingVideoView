@@ -194,8 +194,8 @@ static JKDraggingVideoView *vv;
 #pragma mark - 计算最终缩小后的中心点
 - (void)calculateFinalCenter{
     
-    CGFloat maxW = JKScreenW * 0.5 - 20;
-    CGFloat maxH = JKScreenH * 0.5 - 20;
+    CGFloat maxW = JKScreenW * 0.45 - 20;
+    CGFloat maxH = JKScreenH * 0.25 - 20;
     
     finalWidth = maxW;
     finalHeight = maxW * self.videoView.height / self.videoView.width;
