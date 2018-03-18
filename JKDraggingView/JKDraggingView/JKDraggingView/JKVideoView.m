@@ -703,7 +703,7 @@
     cacheProgressView.translatesAutoresizingMaskIntoConstraints = NO;
     NSLayoutConstraint *cacheProgressViewCenterY = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:1];
     NSLayoutConstraint *cacheProgressViewLeft = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
-    NSLayoutConstraint *cacheProgressViewRight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeRight) multiplier:1 constant:-1];
+    NSLayoutConstraint *cacheProgressViewRight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeRight) multiplier:1 constant:-2];
     NSLayoutConstraint *cacheProgressViewHeight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
     
     [self.bottomToolView addConstraints:@[cacheProgressViewCenterY, cacheProgressViewLeft, cacheProgressViewRight, cacheProgressViewHeight]];
