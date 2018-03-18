@@ -535,10 +535,13 @@ static JKDraggingVideoView *vv;
 #pragma mark - 滑动手势
 - (void)pan:(UIPanGestureRecognizer *)pan{
     
-    CGPoint cp = [pan.view convertPoint:[pan locationInView:pan.view]toView:self.bottomToolView];
-    
-    if ([self.bottomToolView pointInside:cp withEvent:nil] ) {
-        return;
+    if (self.bottomToolView.alpha >= 1) {
+        
+        CGPoint cp = [pan.view convertPoint:[pan locationInView:pan.view]toView:self.bottomToolView];
+        
+        if ([self.bottomToolView pointInside:cp withEvent:nil] && isFullScreen) {
+            return;
+        }
     }
     
     if (pan.state == UIGestureRecognizerStateBegan) {
