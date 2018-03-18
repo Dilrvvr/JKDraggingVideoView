@@ -237,10 +237,11 @@
         CGFloat totalDuration = CMTimeGetSeconds(duration);
         
         NSLog(@"下载进度：%.2f", timeInterval / totalDuration);
-        self.cacheProgressView.progress = timeInterval / totalDuration;
+        [self.cacheProgressView setProgress:timeInterval / totalDuration animated:YES];
+        
         if (self.cacheProgressView.progress >= 1.0) {
-            [self.progressSlider setMaximumTrackImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_slider_MaximumTrackImage@2x.png"]] forState:UIControlStateNormal];
-            self.cacheProgressView.hidden = YES;
+//            [self.progressSlider setMaximumTrackImage:[UIImage imageWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"JKVideoViewResource.bundle/images/player_slider_MaximumTrackImage@2x.png"]] forState:UIControlStateNormal];
+//            self.cacheProgressView.hidden = YES;
         }
         
     } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) { //监听播放器在缓冲数据的状态
@@ -702,8 +703,8 @@
     cacheProgressView.translatesAutoresizingMaskIntoConstraints = NO;
     NSLayoutConstraint *cacheProgressViewCenterY = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeCenterY) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeCenterY) multiplier:1 constant:1];
     NSLayoutConstraint *cacheProgressViewLeft = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
-    NSLayoutConstraint *cacheProgressViewRight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-    NSLayoutConstraint *cacheProgressViewHeight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:0.5];
+    NSLayoutConstraint *cacheProgressViewRight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:slider attribute:(NSLayoutAttributeRight) multiplier:1 constant:-1];
+    NSLayoutConstraint *cacheProgressViewHeight = [NSLayoutConstraint constraintWithItem:cacheProgressView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:1];
     
     [self.bottomToolView addConstraints:@[cacheProgressViewCenterY, cacheProgressViewLeft, cacheProgressViewRight, cacheProgressViewHeight]];
     
