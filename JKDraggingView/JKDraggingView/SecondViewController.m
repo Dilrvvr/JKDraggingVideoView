@@ -30,20 +30,20 @@
 - (IBAction)wangnima:(id)sender {
     JKDraggingVideoItem *item = [[JKDraggingVideoItem alloc] init];
     
-    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4"];
-    item.videoOriginalSize = CGSizeMake(640, 360);
+    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2018/0828/4c33546eaa6a11e8bc74842b2b4c75ab_wpd.mp4"];//@"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4"];
+    item.videoOriginalSize = CGSizeMake(848, 480);
     [JKDraggingVideoView showWithItem:item];
 }
 
 - (IBAction)pipiXia:(id)sender {
     JKDraggingVideoItem *item = [[JKDraggingVideoItem alloc] init];
     
-    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2017/0316/58ca1d7a66750_wpd.mp4"];
-    item.videoOriginalSize = CGSizeMake(480, 640);
+    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2018/0828/1c45c844-aa25-11e8-a652-1866daeb0df1_wpd.mp4"];//@"http://wvideo.spriteapp.cn/video/2017/0316/58ca1d7a66750_wpd.mp4"];
+    item.videoOriginalSize = CGSizeMake(852, 480);
     [JKDraggingVideoView showWithItem:item];
     
-//    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:item.videoUrl options:nil];
-//    [self getVideoSize:asset];
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:item.videoUrl options:nil];
+    [self getVideoSize:asset];
 }
 
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BgP-CS-JHM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BgP-CS-JHM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,17 +31,17 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="azN-e8-QcH">
-                                <rect key="frame" x="16" y="96" width="46" height="30"/>
+                                <rect key="frame" x="23" y="96" width="54" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="王尼玛"/>
+                                <state key="normal" title="test1"/>
                                 <connections>
                                     <action selector="wangnima:" destination="ZCB-eb-DKj" eventType="touchUpInside" id="sJ9-7N-0YK"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ENn-Sh-943">
-                                <rect key="frame" x="16" y="169" width="46" height="30"/>
+                                <rect key="frame" x="21" y="169" width="56" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="皮皮虾"/>
+                                <state key="normal" title="test2"/>
                                 <connections>
                                     <action selector="pipiXia:" destination="ZCB-eb-DKj" eventType="touchUpInside" id="B6n-au-txZ"/>
                                 </connections>
@@ -59,7 +59,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="r9K-09-uOR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1911" y="124"/>
+            <point key="canvasLocation" x="1909.5999999999999" y="123.68815592203899"/>
         </scene>
         <!--ThirdViewController-->
         <scene sceneID="UBU-jE-KQw">
@@ -74,9 +74,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ike-eG-vLQ">
-                                <rect key="frame" x="20" y="155" width="61" height="30"/>
+                                <rect key="frame" x="33" y="155" width="58" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="shitChen"/>
+                                <state key="normal" title="test3"/>
                                 <connections>
                                     <action selector="shitChen:" destination="QCE-dU-wDl" eventType="touchUpInside" id="rrh-DD-1o9"/>
                                 </connections>
@@ -88,7 +88,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pqf-t5-mmr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2650" y="124"/>
+            <point key="canvasLocation" x="2648.8000000000002" y="123.68815592203899"/>
         </scene>
         <!--My View Controller-->
         <scene sceneID="MoN-xP-FnS">
@@ -124,7 +124,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QE4-x2-hjl" customClass="MyNavController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="58x-KK-D4A">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
