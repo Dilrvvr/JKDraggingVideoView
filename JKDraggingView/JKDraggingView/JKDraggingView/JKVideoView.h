@@ -42,13 +42,13 @@
 @property (nonatomic, weak, readonly) UIProgressView *bottomProgressView;
 
 /** 监听播放完毕的block */
-@property (nonatomic, copy) void (^playFinishedBlock)();
+@property (nonatomic, copy) void (^playFinishedBlock)(void);
 
 /** 监听重播或拖动进度条重播的block */
-@property (nonatomic, copy) void (^userDidReplayBlock)();
+@property (nonatomic, copy) void (^userDidReplayBlock)(void);
 
 /** 监听关闭的block */
-@property (nonatomic, copy) void (^closeBlock)();
+@property (nonatomic, copy) void (^closeBlock)(void);
 
 + (instancetype)viewWithItem:(JKDraggingVideoItem *)item frame:(CGRect)frame;
 

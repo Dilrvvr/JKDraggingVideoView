@@ -83,7 +83,7 @@ static JKDraggingVideoView *vv;
         
         [vv changeToFullScreen];
         
-        if ([item.videoUrl isEqualToString:vv.item.videoUrl]) {
+        if ([item.videoUrl.absoluteString isEqualToString:vv.item.videoUrl.absoluteString]) {
             
             return vv;
         }

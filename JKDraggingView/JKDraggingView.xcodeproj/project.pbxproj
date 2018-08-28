@@ -493,6 +493,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				DEVELOPMENT_TEAM = YX4Y4G65BK;
 				INFOPLIST_FILE = JKDraggingView/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -506,6 +507,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				DEVELOPMENT_TEAM = YX4Y4G65BK;
 				INFOPLIST_FILE = JKDraggingView/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

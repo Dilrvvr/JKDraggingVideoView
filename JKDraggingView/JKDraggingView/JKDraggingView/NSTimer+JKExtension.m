@@ -9,7 +9,7 @@
 #import "NSTimer+JKExtension.h"
 
 @implementation NSTimer (JKExtension)
-+ (NSTimer *)jk_scheduledTimerWithTimeInterval:(NSTimeInterval)interval repeats:(BOOL)repeats isFire:(BOOL)isFire timerBlock:(void(^)())timerBlock{
++ (NSTimer *)jk_scheduledTimerWithTimeInterval:(NSTimeInterval)interval repeats:(BOOL)repeats isFire:(BOOL)isFire timerBlock:(void(^)(void))timerBlock{
     
     NSTimer *timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(jk_timerBlockInvoke:) userInfo:[timerBlock copy] repeats:repeats];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
@@ -25,7 +25,7 @@
 
 + (void)jk_timerBlockInvoke:(NSTimer *)timer{
     
-    void(^block)() = timer.userInfo;
+    void(^block)(void) = timer.userInfo;
     
     !block ? :  block();
 }

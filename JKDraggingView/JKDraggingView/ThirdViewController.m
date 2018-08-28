@@ -23,7 +23,7 @@
 - (IBAction)shitChen:(id)sender {
     JKDraggingVideoItem *item = [[JKDraggingVideoItem alloc] init];
     
-    item.videoUrl = @"http://wvideo.spriteapp.cn/video/2017/0319/58ce61d9c0fbd_wpd.mp4";
+    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2017/0319/58ce61d9c0fbd_wpd.mp4"];
     item.videoOriginalSize = CGSizeMake(410, 360);
     [JKDraggingVideoView showWithItem:item];
 }

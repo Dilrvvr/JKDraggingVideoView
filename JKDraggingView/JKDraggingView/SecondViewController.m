@@ -9,6 +9,7 @@
 #import "SecondViewController.h"
 #import "UIView+JKExtension.h"
 #import "JKDraggingVideoView.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface SecondViewController ()
 /** <#注释#> */
@@ -29,7 +30,7 @@
 - (IBAction)wangnima:(id)sender {
     JKDraggingVideoItem *item = [[JKDraggingVideoItem alloc] init];
     
-    item.videoUrl = @"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4";
+    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4"];
     item.videoOriginalSize = CGSizeMake(640, 360);
     [JKDraggingVideoView showWithItem:item];
 }
@@ -37,9 +38,33 @@
 - (IBAction)pipiXia:(id)sender {
     JKDraggingVideoItem *item = [[JKDraggingVideoItem alloc] init];
     
-    item.videoUrl = @"http://wvideo.spriteapp.cn/video/2017/0316/58ca1d7a66750_wpd.mp4";
+    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2017/0316/58ca1d7a66750_wpd.mp4"];
     item.videoOriginalSize = CGSizeMake(480, 640);
     [JKDraggingVideoView showWithItem:item];
+    
+//    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:item.videoUrl options:nil];
+//    [self getVideoSize:asset];
+}
+
+
+
+// 获取视频的尺寸
+- (void)getVideoSize:(AVAsset *)asset{
+    
+    // 一般视频都有至少两个track(轨道)，根据track.mediaType判断track类型
+    // AVMediaTypeVideo表示视频轨道，AVMediaTypeAudio代表音频轨道，其他类型可以查看文档。
+    // 根据track的naturalSize属性即可获得视频尺寸
+    NSArray *array = asset.tracks;
+    
+    for (AVAssetTrack *track in array) {
+        
+        if ([track.mediaType isEqualToString:AVMediaTypeVideo]) {
+            // 注意naturalSize的宽高是反着的
+            CGSize videoSize = CGSizeMake(track.naturalSize.height, track.naturalSize.width);
+            NSLog(@"videoSize -->%@", NSStringFromCGSize(videoSize));
+            break;
+        }
+    }
 }
 
 //- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{

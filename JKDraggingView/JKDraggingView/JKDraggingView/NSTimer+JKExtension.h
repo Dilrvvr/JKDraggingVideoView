@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface NSTimer (JKExtension)
-+ (NSTimer *)jk_scheduledTimerWithTimeInterval:(NSTimeInterval)interval repeats:(BOOL)repeats isFire:(BOOL)isFire timerBlock:(void(^)())timerBlock;
++ (NSTimer *)jk_scheduledTimerWithTimeInterval:(NSTimeInterval)interval repeats:(BOOL)repeats isFire:(BOOL)isFire timerBlock:(void(^)(void))timerBlock;
 
 - (void)jk_pauseTimer;
 - (void)jk_resumeTimer;

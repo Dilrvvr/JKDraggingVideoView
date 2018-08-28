@@ -13,7 +13,7 @@
 @interface JKVideoView () <CALayerDelegate>
 
 /** 视频网址 */
-@property (nonatomic, copy) NSString *videoUrl;
+@property (nonatomic, copy) NSURL *videoUrl;
 
 /** 播放器 */
 @property (nonatomic, strong) AVPlayer *player;
@@ -160,7 +160,7 @@
 #pragma mark - 设置播放的视频
 - (void)setItem:(JKDraggingVideoItem *)item{
     
-    if ([_videoUrl isEqualToString:item.videoUrl]) {
+    if ([_videoUrl.absoluteString isEqualToString:item.videoUrl.absoluteString]) {
         [self switchOrientation:self.changeToLandscapeButton];
         return;
     }
@@ -186,7 +186,7 @@
     [self.playerLayer setPlayer:self.player];
 //    [self.playerLayerView.layer addSublayer:self.playerLayer];
     
-    self.playerItem = [AVPlayerItem playerItemWithURL:[NSURL URLWithString:_videoUrl]];
+    self.playerItem = [AVPlayerItem playerItemWithURL:_videoUrl];
     
     [self.player replaceCurrentItemWithPlayerItem:_playerItem];
     self.playOrPauseButton.selected = YES;

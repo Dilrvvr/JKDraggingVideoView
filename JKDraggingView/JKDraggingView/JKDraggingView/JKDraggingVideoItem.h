@@ -16,7 +16,7 @@
 @property (nonatomic, assign) UIEdgeInsets screenInsets;
 
 /** 视频url */
-@property (nonatomic, copy) NSString *videoUrl;
+@property (nonatomic, copy) NSURL *videoUrl;
 
 /** 视频尺寸 */
 @property (nonatomic, assign) CGSize videoOriginalSize;
