@@ -107,8 +107,8 @@
             
             if ([track.mediaType isEqualToString:AVMediaTypeVideo]) {
                 
-                // 注意naturalSize的宽高是反着的
-                videoSize = CGSizeMake(track.naturalSize.height, track.naturalSize.width);
+                // 注意修正naturalSize的宽高
+                videoSize = CGSizeApplyAffineTransform(track.naturalSize, track.preferredTransform);//CGSizeMake(track.naturalSize.height, track.naturalSize.width);
                 
                 break;
             }
