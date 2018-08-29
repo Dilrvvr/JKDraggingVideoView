@@ -11,13 +11,16 @@
 #import "JKVideoView.h"
 
 @interface JKDraggingVideoView () {
+    
     CGPoint FinalCenter;
     CGPoint ScreenCenter;
     CGFloat finalWidth;
     CGFloat finalHeight;
+    
     BOOL isFullScreen;
     BOOL isSmallWindow;
     BOOL isDragging;
+    
     CGFloat distance;
 }
 
@@ -72,9 +75,9 @@ static JKDraggingVideoView *vv;
     
     if (!vv) {
         
-        vv = [[JKDraggingVideoView alloc] initWithFrame:JKScreenBounds];
+        vv = [[JKDraggingVideoView alloc] initWithFrame:JKDraggingVideoScreenBounds];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOnAutoRotateNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKDraggingVideoTurnOnAutoRotateNotification object:nil];
         
     }else{
         if (!vv.userInteractionEnabled) {
@@ -194,17 +197,17 @@ static JKDraggingVideoView *vv;
 #pragma mark - 计算最终缩小后的中心点
 - (void)calculateFinalCenter{
     
-    CGFloat maxW = JKScreenW * 0.45 - 20;
-    CGFloat maxH = JKScreenH * 0.25 - 20;
+    CGFloat maxW = JKDraggingVideoScreenW * 0.45 - 20;
+    CGFloat maxH = JKDraggingVideoScreenH * 0.25 - 20;
     
     finalWidth = maxW;
-    finalHeight = maxW * self.videoView.height / self.videoView.width;
+    finalHeight = maxW * self.videoView.frame.size.height / self.videoView.frame.size.width;
     if (finalHeight > maxH) {
         finalHeight = maxH;
-        finalWidth = maxH * self.videoView.width / self.videoView.height;
+        finalWidth = maxH * self.videoView.frame.size.width / self.videoView.frame.size.height;
     }
     
-    FinalCenter = CGPointMake(JKScreenW - finalWidth * 0.5 - self.item.screenInsets.right, JKScreenH - finalHeight * 0.5 - self.item.screenInsets.bottom);
+    FinalCenter = CGPointMake(JKDraggingVideoScreenW - finalWidth * 0.5 - self.item.screenInsets.right, JKDraggingVideoScreenH - finalHeight * 0.5 - self.item.screenInsets.bottom);
 }
 
 #pragma mark - 播放\暂停
@@ -262,7 +265,7 @@ static JKDraggingVideoView *vv;
     
     // 约束
     closeButton.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *closeButtonTop = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:JKIsIphoneX ? 44 : 30];
+    NSLayoutConstraint *closeButtonTop = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:JKDraggingVideoIsIphoneX ? 44 : 30];
     NSLayoutConstraint *closeButtonLeft = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:20];
     NSLayoutConstraint *closeButtonWidth = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     NSLayoutConstraint *closeButtonHeight = [NSLayoutConstraint constraintWithItem:closeButton attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
@@ -279,7 +282,7 @@ static JKDraggingVideoView *vv;
     
     // 约束
     zoomButton.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint *zoomButtonTop = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:JKIsIphoneX ? 44 : 30];
+    NSLayoutConstraint *zoomButtonTop = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:JKDraggingVideoIsIphoneX ? 44 : 30];
     NSLayoutConstraint *zoomButtonRight = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:-20];
     NSLayoutConstraint *zoomButtonWidth = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     NSLayoutConstraint *zoomButtonHeight = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
@@ -288,10 +291,10 @@ static JKDraggingVideoView *vv;
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
     [self addGestureRecognizer:pan];
     
-    isFullScreen = (self.width >= JKScreenW && self.height >= JKScreenH);
+    isFullScreen = (self.frame.size.width >= JKDraggingVideoScreenW && self.frame.size.height >= JKDraggingVideoScreenH);
     
     distance = 0;
-    ScreenCenter = CGPointMake(JKScreenW * 0.5, JKScreenH * 0.5);
+    ScreenCenter = CGPointMake(JKDraggingVideoScreenW * 0.5, JKDraggingVideoScreenH * 0.5);
     
     self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
     self.singleTap.numberOfTapsRequired = 1;
@@ -349,10 +352,10 @@ static JKDraggingVideoView *vv;
 - (void)changeScreenIsToLandscape:(BOOL)isToLandscape{
     self.changeToLandscapeButton.selected = isToLandscape;
     
-    self.frame = JKScreenBounds;
+    self.frame = JKDraggingVideoScreenBounds;
     
     self.videoView.size = isToLandscape ? self.item.videoLandscapeSize : self.item.videoPortraitSize;
-    self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+    self.videoView.center = CGPointMake(self.frame.size.width * 0.5, self.frame.size.height * 0.5);
 }
 
 // 设置底部工具条等视图
@@ -374,7 +377,7 @@ static JKDraggingVideoView *vv;
     _bottomToolView.translatesAutoresizingMaskIntoConstraints = NO;
     NSLayoutConstraint *bottomToolViewLeft = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:0];
     NSLayoutConstraint *bottomToolViewRight = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:0];
-    NSLayoutConstraint *bottomToolViewBottom = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:JKIsIphoneX ? -34 : 0];
+    NSLayoutConstraint *bottomToolViewBottom = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:JKDraggingVideoIsIphoneX ? -34 : 0];
     NSLayoutConstraint *bottomToolViewH = [NSLayoutConstraint constraintWithItem:_bottomToolView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     [self addConstraints:@[bottomToolViewLeft, bottomToolViewRight, bottomToolViewBottom, bottomToolViewH]];
     /*
@@ -457,7 +460,7 @@ static JKDraggingVideoView *vv;
     [UIView animateWithDuration:0.5 animations:^{
         //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
         
-        self.frame = JKScreenBounds;
+        self.frame = JKDraggingVideoScreenBounds;
         self.videoView.size = self.item.videoPortraitSize;
         self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
         [self.videoView layoutIfNeeded];
@@ -473,7 +476,7 @@ static JKDraggingVideoView *vv;
         [self addDoubleTap];
         [self.videoView showOrHideBottomToolView];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOnAutoRotateNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKDraggingVideoTurnOnAutoRotateNotification object:nil];
     }];
 }
 
@@ -506,7 +509,7 @@ static JKDraggingVideoView *vv;
             self.videoView.insideCloseButton.hidden = NO;
             self.bottomProgressView.hidden = NO;
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:JKDraggingVideoTurnOffAutoRotateNotification object:nil];
         }];
         return;
     }
@@ -528,7 +531,7 @@ static JKDraggingVideoView *vv;
         self.videoView.insideCloseButton.hidden = NO;
         self.bottomProgressView.hidden = NO;
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:JKDraggingVideoTurnOffAutoRotateNotification object:nil];
     }];
 }
 
@@ -579,10 +582,10 @@ static JKDraggingVideoView *vv;
         self.videoView.height = _item.videoPortraitSize.height - (_item.videoPortraitSize.height - finalHeight) * distance / (FinalCenter.y - ScreenCenter.y);
         self.videoView.width = _item.videoPortraitSize.width - (_item.videoPortraitSize.width - finalWidth) * distance / (FinalCenter.y - ScreenCenter.y);
         
-        self.height = JKScreenH - (JKScreenH - finalHeight) * distance / (FinalCenter.y - ScreenCenter.y);
-        self.width = JKScreenW - (JKScreenW - finalWidth) * distance / (FinalCenter.y - ScreenCenter.y);
+        self.height = JKDraggingVideoScreenH - (JKDraggingVideoScreenH - finalHeight) * distance / (FinalCenter.y - ScreenCenter.y);
+        self.width = JKDraggingVideoScreenW - (JKDraggingVideoScreenW - finalWidth) * distance / (FinalCenter.y - ScreenCenter.y);
         
-        //        self.videoView.transform = CGAffineTransformMakeScale(1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKScreenW), 1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKScreenW));
+        //        self.videoView.transform = CGAffineTransformMakeScale(1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKDraggingVideoScreenW), 1 - distance / (FinalCenter.y - ScreenCenter.y) * (1 - finalWidth / JKDraggingVideoScreenW));
         
         
         self.videoView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
@@ -606,7 +609,7 @@ static JKDraggingVideoView *vv;
     
     if (isFullScreen) {
         
-        if (self.y > JKScreenH * 0.5) { // 缩小
+        if (self.y > JKDraggingVideoScreenH * 0.5) { // 缩小
             
             [self changeToSmallWindow];
             
@@ -618,7 +621,7 @@ static JKDraggingVideoView *vv;
     }
     
     // 非全屏的情况，可以随意拖动
-    if (self.centerX > JKScreenW && self.centerY >= JKScreenH * 0.5) {
+    if (self.centerX > JKDraggingVideoScreenW && self.centerY >= JKDraggingVideoScreenH * 0.5) {
         
         [self removeVideoView];
         
@@ -627,9 +630,9 @@ static JKDraggingVideoView *vv;
     
     [UIView animateWithDuration:0.5 animations:^{
         
-        self.centerX = (self.centerX > JKScreenW * 0.5) ? JKMaxCenterX : JKMinCenterX;
+        self.centerX = (self.centerX > JKDraggingVideoScreenW * 0.5) ? JKDraggingVideoMaxCenterX : JKDraggingVideoMinCenterX;
         
-        self.centerY = (self.centerY > JKMaxCenterY) ? JKMaxCenterY : ((self.centerY < JKMinCenterY) ? JKMinCenterY : self.centerY);
+        self.centerY = (self.centerY > JKDraggingVideoMaxCenterY) ? JKDraggingVideoMaxCenterY : ((self.centerY < JKDraggingVideoMinCenterY) ? JKDraggingVideoMinCenterY : self.centerY);
     }];
 }
 
@@ -641,7 +644,7 @@ static JKDraggingVideoView *vv;
     if (isSmallWindow) {
         [UIView animateWithDuration:0.5 animations:^{
             self.alpha = 0;
-            self.x = JKScreenW;
+            self.x = JKDraggingVideoScreenW;
             
         } completion:^(BOOL finished) {
             [self.videoView resetPlayView];
@@ -701,7 +704,7 @@ static JKDraggingVideoView *vv;
 
 - (void)dealloc{
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:JKTurnOffAutoRotateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:JKDraggingVideoTurnOffAutoRotateNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"%d, %s",__LINE__, __func__);

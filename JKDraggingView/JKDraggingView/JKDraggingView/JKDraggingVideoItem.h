@@ -6,7 +6,7 @@
 //  Copyright © 2017年 albert. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 #import "JKDraggingVideoViewMacro.h"
 
 @class JKVideoView;
@@ -36,4 +36,9 @@
 
 /** 视频横屏尺寸 */
 @property (nonatomic, assign, readonly) CGSize videoLandscapeSize;
+
+
+
+/** 获取视频的尺寸 */
++ (void)getVideoSizeWithURL:(NSURL *)URL complete:(void(^)(CGSize videoSize))complete;
 @end

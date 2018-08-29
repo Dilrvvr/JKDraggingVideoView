@@ -81,6 +81,8 @@
 - (void)suspendPlayVideo;
 
 - (void)resetPlayView;
+
+
 @end
 
 

@@ -25,8 +25,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canRotate) name:JKTurnOnAutoRotateNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canNotRotate) name:JKTurnOffAutoRotateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canRotate) name:JKDraggingVideoTurnOnAutoRotateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canNotRotate) name:JKDraggingVideoTurnOffAutoRotateNotification object:nil];
 }
 
 - (void)canRotate{
