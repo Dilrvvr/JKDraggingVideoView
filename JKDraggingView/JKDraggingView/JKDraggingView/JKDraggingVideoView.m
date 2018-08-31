@@ -95,7 +95,7 @@ static JKDraggingVideoView *vv;
         [vv.bottomProgressView removeFromSuperview];
     }
     
-    [[UIApplication sharedApplication].keyWindow addSubview:vv];
+    [[UIApplication sharedApplication].delegate.window addSubview:vv];
     [UIApplication sharedApplication].statusBarHidden = YES;
     vv.item = item;
     

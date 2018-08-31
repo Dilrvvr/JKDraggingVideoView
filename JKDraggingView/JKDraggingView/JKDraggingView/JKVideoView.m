@@ -56,6 +56,9 @@
 
 /** 暂停时的时间 */
 @property (nonatomic, assign) Float64 currentTime;
+
+/** tipLabel */
+@property (nonatomic, weak) UILabel *tipLabel;
 @end
 
 @implementation JKVideoView
@@ -198,10 +201,13 @@
 #pragma mark - 监听playerItem的某些属性
 // 监听获得消息
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
+    self.tipLabel.hidden = YES;
+    
     AVPlayerItem *playerItem = (AVPlayerItem *)object;
     
     if ([keyPath isEqualToString:@"status"]) { // 监听状态
-        if (playerItem.status == AVPlayerStatusReadyToPlay) {
+        if (playerItem.status == AVPlayerItemStatusReadyToPlay) {
             // status 点进去看 有三种状态
             
             CGFloat duration = playerItem.duration.value / playerItem.duration.timescale; // 视频总时间
@@ -219,11 +225,13 @@
             [self updateProgressInfo];
             [self addProgressTimer];
             
-        } else if ([playerItem status] == AVPlayerStatusFailed || [playerItem status] == AVPlayerStatusUnknown) {
+        } else if ([playerItem status] == AVPlayerItemStatusFailed || [playerItem status] == AVPlayerItemStatusUnknown) {
             [self.player pause];
             [self.middleIndicatorView startAnimating];
             [self.playIndicatorView startAnimating];
             self.playOrPauseButton.hidden = YES;
+            self.tipLabel.hidden = NO;
+            self.tipLabel.text = [NSString stringWithFormat:@"play faild: %@", playerItem.error.localizedDescription];
         }
         
     } else if ([keyPath isEqualToString:@"loadedTimeRanges"]) {  //监听播放器的下载进度
@@ -534,7 +542,7 @@
     
     // slogan
     UIImageView *sloganView = [[UIImageView alloc] init];
-    sloganView.backgroundColor = [UIColor darkGrayColor];
+//    sloganView.backgroundColor = [UIColor darkGrayColor];
     [self addSubview:sloganView];
     self.sloganView = sloganView;
     
@@ -574,6 +582,24 @@
     NSLayoutConstraint *middleIndicatorViewW = [NSLayoutConstraint constraintWithItem:middleIndicatorView attribute:(NSLayoutAttributeWidth) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:37];
     NSLayoutConstraint *middleIndicatorViewH = [NSLayoutConstraint constraintWithItem:middleIndicatorView attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:37];
     [self addConstraints:@[middleIndicatorViewCenterX, middleIndicatorViewCenterY, middleIndicatorViewW, middleIndicatorViewH]];
+    
+    UILabel *tipLabel = [[UILabel alloc] init];
+    tipLabel.numberOfLines = 0;
+    tipLabel.hidden = YES;
+    tipLabel.textAlignment = NSTextAlignmentCenter;
+    tipLabel.font = [UIFont systemFontOfSize:15];
+    tipLabel.textColor = [UIColor redColor];
+    tipLabel.userInteractionEnabled = NO;
+    [self addSubview:tipLabel];
+    _tipLabel = tipLabel;
+    
+    // 约束
+    tipLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *tipLabelTop = [NSLayoutConstraint constraintWithItem:tipLabel attribute:(NSLayoutAttributeTop) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeTop) multiplier:1 constant:0];
+    NSLayoutConstraint *tipLabelBottom = [NSLayoutConstraint constraintWithItem:tipLabel attribute:(NSLayoutAttributeBottom) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeBottom) multiplier:1 constant:0];
+    NSLayoutConstraint *tipLabelLeft = [NSLayoutConstraint constraintWithItem:tipLabel attribute:(NSLayoutAttributeLeft) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeLeft) multiplier:1 constant:15];
+    NSLayoutConstraint *tipLabelRight = [NSLayoutConstraint constraintWithItem:tipLabel attribute:(NSLayoutAttributeRight) relatedBy:(NSLayoutRelationEqual) toItem:self attribute:(NSLayoutAttributeRight) multiplier:1 constant:-15];
+    [self addConstraints:@[tipLabelTop, tipLabelBottom, tipLabelLeft, tipLabelRight]];
 }
 
 - (void)setupBottomToolView{

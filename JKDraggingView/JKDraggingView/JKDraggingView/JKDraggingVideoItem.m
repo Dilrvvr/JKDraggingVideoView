@@ -22,6 +22,7 @@
         self.autoHideInterval = 5;
         self.bottomProgressColor = [[UIColor redColor] colorWithAlphaComponent:0.7];
         self.screenInsets = UIEdgeInsetsMake(JKDraggingVideoIsIphoneX ? 54 : 30, 10, JKDraggingVideoIsIphoneX ? 44 : 10, 10);
+        self.videoOriginalSize = CGSizeMake(JKDraggingVideoScreenW, JKDraggingVideoScreenW / 16 * 9);
     }
     return self;
 }

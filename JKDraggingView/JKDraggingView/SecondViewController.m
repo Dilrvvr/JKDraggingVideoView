@@ -31,8 +31,8 @@
 - (IBAction)wangnima:(id)sender {
     JKDraggingVideoItem *item = [[JKDraggingVideoItem alloc] init];
     
-    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2018/0828/4c33546eaa6a11e8bc74842b2b4c75ab_wpd.mp4"];//@"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4"];
-    item.videoOriginalSize = CGSizeMake(848, 480);
+    item.videoUrl = [NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2017/0317/58cb1ba0ef10f_wpd.mp4"];//[NSURL URLWithString:@"http://wvideo.spriteapp.cn/video/2018/0828/4c33546eaa6a11e8bc74842b2b4c75ab_wpd.mp4"];
+//    item.videoOriginalSize = CGSizeMake(848, 480);
     [JKDraggingVideoView showWithItem:item];
 }
 
