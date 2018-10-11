@@ -594,6 +594,8 @@ static JKDraggingVideoView *vv;
         
         if (!self.changeToLandscapeButton.selected) {
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:JKDraggingVideoTurnOffAutoRotateNotification object:nil];
+            
             UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
             
             [UIView animateWithDuration:0.5 animations:^{

@@ -29,8 +29,6 @@
 /** 横屏控制 */
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     
-    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeRight;
-    
     if (self.isCanAutoRotate) {
         
         return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeRight;
