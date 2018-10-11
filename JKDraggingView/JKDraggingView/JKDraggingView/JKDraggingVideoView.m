@@ -10,7 +10,7 @@
 #import "UIView+JKExtension.h"
 #import "JKVideoView.h"
 
-@interface JKDraggingVideoView () {
+@interface JKDraggingVideoView () <UIGestureRecognizerDelegate> {
     
     CGPoint FinalCenter;
     CGPoint ScreenCenter;
@@ -301,6 +301,7 @@ static JKDraggingVideoView *vv;
     [self addConstraints:@[zoomButtonTop, zoomButtonRight, zoomButtonWidth, zoomButtonHeight]];
     
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    pan.delegate = self;
     [self addGestureRecognizer:pan];
     
     isFullScreen = (self.frame.size.width >= JKDraggingVideoScreenW && self.frame.size.height >= JKDraggingVideoScreenH);
@@ -325,7 +326,7 @@ static JKDraggingVideoView *vv;
     switch ([UIDevice currentDevice].orientation) {
         case UIDeviceOrientationLandscapeLeft:
         {
-            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationLandscapeRight) animated:YES];
+            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationLandscapeRight) animated:NO];
             
             [self changeScreenIsToLandscape:YES];
         }
@@ -333,7 +334,7 @@ static JKDraggingVideoView *vv;
         case UIDeviceOrientationPortrait:
         {
             
-            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationPortrait) animated:YES];
+            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationPortrait) animated:NO];
             
             [self changeScreenIsToLandscape:NO];
         }
@@ -404,7 +405,11 @@ static JKDraggingVideoView *vv;
     
     CGRect rect = [UIApplication sharedApplication].delegate.window.frame;
     
+    UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
+    
     [UIView animateWithDuration:0.25 animations:^{
+        
+        statusBar.alpha = 0;
         
         self.videoView.size = isToLandscape ? self.item.videoLandscapeSize : self.item.videoPortraitSize;
         
@@ -513,7 +518,7 @@ static JKDraggingVideoView *vv;
 #pragma mark - 全屏\小窗切换
 - (void)changeToFullScreen{
     
-    [UIView changeInterfaceOrientation:(UIInterfaceOrientationPortrait)];
+//    [UIView changeInterfaceOrientation:(UIInterfaceOrientationPortrait)];
     
     _videoView.insideCloseButton.hidden = YES;
     
@@ -605,17 +610,10 @@ static JKDraggingVideoView *vv;
 #pragma mark - 滑动手势
 - (void)pan:(UIPanGestureRecognizer *)pan{
     
-    if (self.bottomToolView.alpha >= 1) {
-        
-        CGPoint cp = [pan.view convertPoint:[pan locationInView:pan.view]toView:self.bottomToolView];
-        
-        if ([self.bottomToolView pointInside:cp withEvent:nil] && isFullScreen) {
-            return;
-        }
-    }
-    
     if (pan.state == UIGestureRecognizerStateBegan) {
+        
         NSLog(@"UIGestureRecognizerStateBegan");
+        
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         
         self.bottomProgressView.hidden = YES;
@@ -777,6 +775,27 @@ static JKDraggingVideoView *vv;
     //        self.transform = CGAffineTransformIdentity;
     //        [self removeVideoView];
     //    }];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    
+    if ([gestureRecognizer locationInView:self].y < 88) {
+        
+        return  NO;
+    }
+    
+    if (self.bottomToolView.alpha >= 1) {
+        
+        CGPoint cp = [gestureRecognizer.view convertPoint:[gestureRecognizer locationInView:gestureRecognizer.view]toView:self.bottomToolView];
+        
+        if ([self.bottomToolView pointInside:cp withEvent:nil] && isFullScreen) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 - (void)dealloc{
