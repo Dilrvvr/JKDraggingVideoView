@@ -314,6 +314,29 @@ static JKDraggingVideoView *vv;
     
     // 监听屏幕旋转
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *)noti{
+    
+    NSLog(@"%@", noti.userInfo);
+    
+    switch ([UIDevice currentDevice].orientation) {
+        case UIDeviceOrientationLandscapeLeft:
+        {
+            [self changeScreenIsToLandscape:YES];
+        }
+            break;
+        case UIDeviceOrientationPortrait:
+        {
+            [self changeScreenIsToLandscape:NO];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)addDoubleTap{
@@ -362,6 +385,8 @@ static JKDraggingVideoView *vv;
 }
 
 - (void)changeScreenIsToLandscape:(BOOL)isToLandscape{
+    
+    if (isDragging) { return; }
     
 //    self.changeToLandscapeButton.selected = isToLandscape;
 //
@@ -606,6 +631,9 @@ static JKDraggingVideoView *vv;
     }
     
     if (self.changeToLandscapeButton.selected) {
+        
+        isDragging = (pan.state != UIGestureRecognizerStateEnded);
+        
         return;
     }
     

@@ -7,6 +7,8 @@
 //
 
 #import "MyViewController.h"
+#import "AppDelegate.h"
+#import "JKDraggingVideoViewMacro.h"
 
 @interface MyViewController ()
 
@@ -19,6 +21,31 @@
     
     self.view.backgroundColor = [UIColor lightGrayColor];
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canRotate) name:JKDraggingVideoTurnOnAutoRotateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(canNotRotate) name:JKDraggingVideoTurnOffAutoRotateNotification object:nil];
+}
+
+- (void)canRotate{
+    
+    [(AppDelegate *)[UIApplication sharedApplication].delegate setIsCanAutoRotate:YES];
+    
+    if (@available(iOS 11.0, *)) {
+        [self setNeedsUpdateOfHomeIndicatorAutoHidden];
+    } else {
+        // Fallback on earlier versions
+    }
+}
+
+- (void)canNotRotate{
+    
+    [(AppDelegate *)[UIApplication sharedApplication].delegate setIsCanAutoRotate:NO];
+    
+    if (@available(iOS 11.0, *)) {
+        [self setNeedsUpdateOfHomeIndicatorAutoHidden];
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 - (void)didReceiveMemoryWarning {
