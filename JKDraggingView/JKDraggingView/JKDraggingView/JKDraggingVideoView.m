@@ -96,7 +96,14 @@ static JKDraggingVideoView *vv;
     }
     
     [[UIApplication sharedApplication].delegate.window addSubview:vv];
-    [UIApplication sharedApplication].statusBarHidden = YES;
+    
+    UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        statusBar.alpha = 0;
+    }];
+    
     vv.item = item;
     
     return vv;
@@ -480,8 +487,12 @@ static JKDraggingVideoView *vv;
     
     _videoView.insideCloseButton.hidden = YES;
     
+    UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
+    
     [UIView animateWithDuration:0.5 animations:^{
         //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
+        
+        statusBar.alpha = 0;
         
         self.frame = JKDraggingVideoScreenBounds;
         self.videoView.size = self.item.videoPortraitSize;
@@ -494,7 +505,6 @@ static JKDraggingVideoView *vv;
         isSmallWindow = NO;
         distance = 0;
         isDragging = NO;
-        [UIApplication sharedApplication].statusBarHidden = YES;
         
         [self addDoubleTap];
         [self.videoView showOrHideBottomToolView];
@@ -507,7 +517,7 @@ static JKDraggingVideoView *vv;
     
     [self removeGestureRecognizer:self.doubleTap];
     
-    [UIApplication sharedApplication].statusBarHidden = NO;
+    UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
     
     self.bottomProgressView.hidden = YES;
     
@@ -516,6 +526,8 @@ static JKDraggingVideoView *vv;
         
         [UIView animateWithDuration:0.5 delay:0.25 options:UIViewAnimationOptionCurveLinear animations:^{
 //            [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
+            
+            statusBar.alpha = 1;
             
             [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
             self.size = CGSizeMake(finalWidth, finalHeight);
@@ -539,6 +551,8 @@ static JKDraggingVideoView *vv;
     
     [UIView animateWithDuration:0.5 animations:^{
 //        [UIView setAnimationCurve:(UIViewAnimationCurveEaseIn)];
+        
+        statusBar.alpha = 1;
         
         [self.videoView showBottomToolView:NO isShowBottomProgress:YES];
         self.size = CGSizeMake(finalWidth, finalHeight);
@@ -580,7 +594,12 @@ static JKDraggingVideoView *vv;
         
         if (!self.changeToLandscapeButton.selected) {
             
-            [UIApplication sharedApplication].statusBarHidden = NO;
+            UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                
+                statusBar.alpha = 1;
+            }];
         }
     }
     
