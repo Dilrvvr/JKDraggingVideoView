@@ -325,11 +325,16 @@ static JKDraggingVideoView *vv;
     switch ([UIDevice currentDevice].orientation) {
         case UIDeviceOrientationLandscapeLeft:
         {
+            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationLandscapeRight) animated:YES];
+            
             [self changeScreenIsToLandscape:YES];
         }
             break;
         case UIDeviceOrientationPortrait:
         {
+            
+            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationPortrait) animated:YES];
+            
             [self changeScreenIsToLandscape:NO];
         }
             break;
