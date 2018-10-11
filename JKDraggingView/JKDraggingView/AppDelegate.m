@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MyViewController.h"
 
 @interface AppDelegate ()
 
@@ -19,11 +20,16 @@
     
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
+    
     return YES;
 }
 
 /** 横屏控制 */
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeRight;
     
     if (self.isCanAutoRotate) {
         

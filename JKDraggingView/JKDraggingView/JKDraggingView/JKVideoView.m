@@ -325,7 +325,9 @@
     button.selected = !button.selected;
     // TODO:切换横屏--------------------
     
-    [self interfaceOrientation:button.selected ? UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait];
+    !self.changeOrientationBlock ? : self.changeOrientationBlock(button.selected);
+    
+//    [self interfaceOrientation:button.selected ? UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait];
 }
 
 - (void)interfaceOrientation:(UIInterfaceOrientation)orientation{

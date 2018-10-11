@@ -50,6 +50,9 @@
 /** 监听关闭的block */
 @property (nonatomic, copy) void (^closeBlock)(void);
 
+/** 监听旋转的block */
+@property (nonatomic, copy) void (^changeOrientationBlock)(BOOL isToLandscape);
+
 + (instancetype)viewWithItem:(JKDraggingVideoItem *)item frame:(CGRect)frame;
 
 /**

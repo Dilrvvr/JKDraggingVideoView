@@ -60,17 +60,17 @@
 }
 
 - (BOOL)shouldAutorotate{
-    return self.canAutoRotate;
+    return NO;//self.canAutoRotate;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    
-    return self.canAutoRotate ? UIInterfaceOrientationMaskPortrait |UIInterfaceOrientationMaskLandscapeRight : UIInterfaceOrientationMaskPortrait;
-}
-
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
-    return self.canAutoRotate ? UIInterfaceOrientationPortrait | UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait ;
-}
+//- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+//
+//    return self.canAutoRotate ? UIInterfaceOrientationMaskPortrait |UIInterfaceOrientationMaskLandscapeRight : UIInterfaceOrientationMaskPortrait;
+//}
+//
+//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+//    return self.canAutoRotate ? UIInterfaceOrientationPortrait | UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait ;
+//}
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];

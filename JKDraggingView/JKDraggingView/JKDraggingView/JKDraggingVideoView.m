@@ -146,6 +146,11 @@ static JKDraggingVideoView *vv;
             [weakSelf removeVideoView];
         }];
         
+        [videoView setChangeOrientationBlock:^(BOOL isToLandscape) {
+           
+            [weakSelf changeScreenIsToLandscape:isToLandscape];
+        }];
+        
         _videoView = videoView;
     }
     return _videoView;
@@ -301,7 +306,7 @@ static JKDraggingVideoView *vv;
     [self addGestureRecognizer:self.singleTap];
     
     // 监听屏幕旋转
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)addDoubleTap{
@@ -350,12 +355,30 @@ static JKDraggingVideoView *vv;
 }
 
 - (void)changeScreenIsToLandscape:(BOOL)isToLandscape{
+    
+//    self.changeToLandscapeButton.selected = isToLandscape;
+//
+//    self.frame = JKDraggingVideoScreenBounds;
+//
+//    self.videoView.size = isToLandscape ? self.item.videoLandscapeSize : self.item.videoPortraitSize;
+//    self.videoView.center = CGPointMake(self.frame.size.width * 0.5, self.frame.size.height * 0.5);
+    
     self.changeToLandscapeButton.selected = isToLandscape;
     
-    self.frame = JKDraggingVideoScreenBounds;
+    CGRect rect = [UIApplication sharedApplication].delegate.window.frame;
     
-    self.videoView.size = isToLandscape ? self.item.videoLandscapeSize : self.item.videoPortraitSize;
-    self.videoView.center = CGPointMake(self.frame.size.width * 0.5, self.frame.size.height * 0.5);
+    [UIView animateWithDuration:0.25 animations:^{
+        
+        self.videoView.size = isToLandscape ? self.item.videoLandscapeSize : self.item.videoPortraitSize;
+        
+        self.videoView.center = isToLandscape ? CGPointMake(self.height * 0.5, self.width * 0.5) : CGPointMake(self.width * 0.5, self.height * 0.5);
+        
+        self.transform = isToLandscape ? CGAffineTransformMakeRotation(M_PI_2) : CGAffineTransformIdentity;
+        
+        self.frame = rect;
+        
+        [self layoutIfNeeded];
+    }];
 }
 
 // 设置底部工具条等视图
