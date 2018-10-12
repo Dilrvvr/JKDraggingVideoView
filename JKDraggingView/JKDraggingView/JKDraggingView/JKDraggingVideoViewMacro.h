@@ -25,9 +25,6 @@
 #define JKDraggingVideoMinCenterY (self.item.screenInsets.top + self.height * 0.5)
 
 
-#define JKDraggingVideoIsIphoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
-
-
 
 /** 开启自动旋转 通知名字 */
 #define JKDraggingVideoTurnOnAutoRotateNotification  @"JKDraggingVideoTurnOnAutoRotateNotification"

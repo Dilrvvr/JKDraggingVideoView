@@ -22,6 +22,8 @@
     BOOL isDragging;
     
     CGFloat distance;
+    
+    BOOL JKDraggingVideoIsIphoneX;
 }
 
 /** 播放器view */
@@ -264,6 +266,15 @@ static JKDraggingVideoView *vv;
 - (void)initialization{
     self.backgroundColor = [UIColor blackColor];
     
+    if (@available(iOS 11.0, *)) {
+        
+        JKDraggingVideoIsIphoneX = UIApplication.sharedApplication.delegate.window.safeAreaInsets.bottom > 0;
+        
+    } else {
+        
+        JKDraggingVideoIsIphoneX = NO;
+    }
+    
     [self addDoubleTap];
     
     // 关闭按钮
@@ -328,16 +339,11 @@ static JKDraggingVideoView *vv;
     switch ([UIDevice currentDevice].orientation) {
         case UIDeviceOrientationLandscapeLeft:
         {
-            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationLandscapeRight) animated:NO];
-            
             [self changeScreenIsToLandscape:YES];
         }
             break;
         case UIDeviceOrientationPortrait:
         {
-            
-            [[UIApplication sharedApplication] setStatusBarOrientation:(UIInterfaceOrientationPortrait) animated:NO];
-            
             [self changeScreenIsToLandscape:NO];
         }
             break;
@@ -395,6 +401,8 @@ static JKDraggingVideoView *vv;
 - (void)changeScreenIsToLandscape:(BOOL)isToLandscape{
     
     if (isDragging || isSmallWindow) { return; }
+    
+    [[UIApplication sharedApplication] setStatusBarOrientation:(isToLandscape ? UIInterfaceOrientationLandscapeRight : UIInterfaceOrientationPortrait) animated:NO];
     
 //    self.changeToLandscapeButton.selected = isToLandscape;
 //
@@ -635,13 +643,6 @@ static JKDraggingVideoView *vv;
         }
     }
     
-    if (self.changeToLandscapeButton.selected) {
-        
-        isDragging = (pan.state != UIGestureRecognizerStateEnded);
-        
-        return;
-    }
-    
     // 获取偏移
     CGPoint point = [pan translationInView:pan.view];
     
@@ -782,6 +783,8 @@ static JKDraggingVideoView *vv;
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    
+    if (self.changeToLandscapeButton.selected) { return NO; }
     
     if (isSmallWindow) { return YES; }
     

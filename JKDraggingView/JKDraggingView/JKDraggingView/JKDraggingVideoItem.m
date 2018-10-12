@@ -13,6 +13,8 @@
 @interface JKDraggingVideoItem () {
     /** 临时的尺寸,修正横竖屏尺寸 */
     CGSize tmpSize;
+    
+    BOOL JKDraggingVideoIsIphoneX;
 }
 @end
 
@@ -21,6 +23,17 @@
     if (self = [super init]) {
         self.autoHideInterval = 5;
         self.bottomProgressColor = [[UIColor redColor] colorWithAlphaComponent:0.7];
+        
+        if (@available(iOS 11.0, *)) {
+            
+            JKDraggingVideoIsIphoneX = UIApplication.sharedApplication.delegate.window.safeAreaInsets.bottom > 0;
+            
+        } else {
+            
+            JKDraggingVideoIsIphoneX = NO;
+        }
+        
+        
         self.screenInsets = UIEdgeInsetsMake(JKDraggingVideoIsIphoneX ? 54 : 30, 10, JKDraggingVideoIsIphoneX ? 44 : 10, 10);
         self.videoOriginalSize = CGSizeMake(JKDraggingVideoScreenW, JKDraggingVideoScreenW / 16 * 9);
     }
