@@ -321,6 +321,8 @@ static JKDraggingVideoView *vv;
 
 - (void)deviceOrientationDidChange:(NSNotification *)noti{
     
+    if (isDragging || isSmallWindow) { return; }
+    
     NSLog(@"%@", noti.userInfo);
     
     switch ([UIDevice currentDevice].orientation) {
@@ -392,7 +394,7 @@ static JKDraggingVideoView *vv;
 
 - (void)changeScreenIsToLandscape:(BOOL)isToLandscape{
     
-    if (isDragging) { return; }
+    if (isDragging || isSmallWindow) { return; }
     
 //    self.changeToLandscapeButton.selected = isToLandscape;
 //
@@ -780,6 +782,8 @@ static JKDraggingVideoView *vv;
 #pragma mark - UIGestureRecognizerDelegate
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
+    
+    if (isSmallWindow) { return YES; }
     
     if ([gestureRecognizer locationInView:self].y < 88) {
         

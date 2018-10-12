@@ -35,7 +35,7 @@
     
     if (([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft || [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight)) {
         
-        [UIView changeInterfaceOrientation:(UIInterfaceOrientationPortrait)];
+//        [UIView changeInterfaceOrientation:(UIInterfaceOrientationPortrait)];
         
         tmpSize = _videoPortraitSize;
         _videoPortraitSize = _videoLandscapeSize;
