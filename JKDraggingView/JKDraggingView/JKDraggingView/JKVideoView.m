@@ -708,6 +708,7 @@
     [slider addTarget:self action:@selector(sliderValueChange:) forControlEvents:(UIControlEventValueChanged)];
     [slider addTarget:self action:@selector(endSlider:) forControlEvents:(UIControlEventTouchUpInside)];
     [slider addTarget:self action:@selector(endSlider:) forControlEvents:(UIControlEventTouchUpOutside)];
+    [slider addTarget:self action:@selector(endSlider:) forControlEvents:(UIControlEventTouchCancel)];
     
     // 约束
     slider.translatesAutoresizingMaskIntoConstraints = NO;
