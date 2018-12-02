@@ -67,6 +67,9 @@
 
 /** 双击手势 */
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTap;
+
+/** panGesture */
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @end
 
 @implementation JKDraggingVideoView
@@ -275,8 +278,6 @@ static JKDraggingVideoView *vv;
         JKDraggingVideoIsIphoneX = NO;
     }
     
-    [self addDoubleTap];
-    
     // 关闭按钮
     UIButton *closeButton = [UIButton buttonWithType:(UIButtonTypeCustom)];
     closeButton.adjustsImageWhenHighlighted = NO;
@@ -311,9 +312,9 @@ static JKDraggingVideoView *vv;
     NSLayoutConstraint *zoomButtonHeight = [NSLayoutConstraint constraintWithItem:zoomButton attribute:(NSLayoutAttributeHeight) relatedBy:(NSLayoutRelationEqual) toItem:nil attribute:(NSLayoutAttributeNotAnAttribute) multiplier:1 constant:40];
     [self addConstraints:@[zoomButtonTop, zoomButtonRight, zoomButtonWidth, zoomButtonHeight]];
     
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
-    pan.delegate = self;
-    [self addGestureRecognizer:pan];
+    self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    self.panGesture.delegate = self;
+    [self addGestureRecognizer:self.panGesture];
     
     isFullScreen = (self.frame.size.width >= JKDraggingVideoScreenW && self.frame.size.height >= JKDraggingVideoScreenH);
     
@@ -321,8 +322,11 @@ static JKDraggingVideoView *vv;
     ScreenCenter = CGPointMake(JKDraggingVideoScreenW * 0.5, JKDraggingVideoScreenH * 0.5);
     
     self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+    self.singleTap.delegate = self;
     self.singleTap.numberOfTapsRequired = 1;
     [self addGestureRecognizer:self.singleTap];
+    
+    [self addDoubleTap];
     
     // 监听屏幕旋转
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -358,6 +362,7 @@ static JKDraggingVideoView *vv;
     if (!self.doubleTap) {
         
         self.doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+        self.doubleTap.delegate = self;
     }
     
     self.doubleTap.numberOfTapsRequired = 2;
@@ -784,20 +789,26 @@ static JKDraggingVideoView *vv;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
     
-    if (self.changeToLandscapeButton.selected) { return NO; }
+    CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
     
-    if (isSmallWindow) { return YES; }
-    
-    if ([gestureRecognizer locationInView:self].y < 88) {
+    if (gestureRecognizer == self.panGesture) {
         
-        return  NO;
+        if (self.changeToLandscapeButton.selected) { return NO; }
+        
+        if (isSmallWindow) { return YES; }
+        
+        if (location.y < 88) {
+            
+            return  NO;
+        }
     }
     
     if (self.bottomToolView.alpha >= 1) {
         
-        CGPoint cp = [gestureRecognizer.view convertPoint:[gestureRecognizer locationInView:gestureRecognizer.view]toView:self.bottomToolView];
+        CGPoint cp = [gestureRecognizer.view convertPoint:location toView:self.bottomToolView];
         
         if ([self.bottomToolView pointInside:cp withEvent:nil] && isFullScreen) {
+            
             return NO;
         }
     }
